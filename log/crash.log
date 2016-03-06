@@ -1,0 +1,48 @@
+2016-03-05 12:31:21 =ERROR REPORT====
+POST /push/registerToken/t [push_module] 404 19ms2016-03-05 12:38:13 =ERROR REPORT====
+POST /gcm/registerToken/t [push_module] 404 92ms2016-03-05 17:29:19 =ERROR REPORT====
+GET /sample/greeting [push_module] 404 154ms2016-03-05 17:29:22 =ERROR REPORT====
+GET /gcm/greeting [push_module] 404 34ms2016-03-05 17:29:59 =ERROR REPORT====
+GET /sample/greeting [push_module] 404 47ms2016-03-05 17:31:11 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-05 17:31:11 =ERROR REPORT====
+GET /sample/hello [push_module] 500 172ms2016-03-05 17:33:18 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-05 17:33:18 =ERROR REPORT====
+GET /sample/hello [push_module] 500 56ms2016-03-05 17:34:03 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-05 17:34:03 =ERROR REPORT====
+GET /sample/hello [push_module] 500 31ms2016-03-05 17:38:24 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-05 17:38:24 =ERROR REPORT====
+GET /sample/hello [push_module] 500 90ms2016-03-05 17:39:13 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-05 17:39:13 =ERROR REPORT====
+GET /sample/hello [push_module] 500 229ms2016-03-06 10:25:25 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:25:25 =ERROR REPORT====
+GET /sample/hello [push_module] 500 255ms2016-03-06 10:27:46 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:27:46 =ERROR REPORT====
+GET /sample/hello [push_module] 500 69ms2016-03-06 10:29:19 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:29:19 =ERROR REPORT====
+GET /sample/hello [push_module] 500 65ms2016-03-06 10:29:51 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:29:51 =ERROR REPORT====
+GET /sample/hello [push_module] 500 60ms2016-03-06 10:30:15 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:30:16 =ERROR REPORT====
+GET /sample/hello [push_module] 500 61ms2016-03-06 10:33:19 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:33:19 =ERROR REPORT====
+GET /sample/hello [push_module] 500 61ms2016-03-06 10:41:40 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:41:40 =ERROR REPORT====
+GET /sample/hello [push_module] 500 60ms2016-03-06 10:43:32 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:43:32 =ERROR REPORT====
+GET /sample/hello [push_module] 500 81ms2016-03-06 10:50:45 =ERROR REPORT====
+"Error in controller, see console.log for details\n"
+2016-03-06 10:50:45 =ERROR REPORT====
+GET /sample/hello [push_module] 500 171ms

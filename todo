@@ -1,0 +1,19 @@
+Client API:
+√ Expose registerGCMToken endpoint
+√ Expose unregisterGCMToken endpoint
+√ Create test suite for endpoint 
+√ Create TokenModel with validation 
+√ Store UserModel in database
+√ Create UserModel tests (unable to run due to bug in CB)
+
+
+GCM API Client:
+ X Create GCMApiClient that communicates with GCM
+
+Web API:
+ X Create UI interface for creating push
+ X Expose REST API containing 'sendPush' endpoint 
+ X Fetch all stored UserModels and communicate to GCM through GCMApiClient
+
+ MISC:
+ - CLI access to underlying DB
