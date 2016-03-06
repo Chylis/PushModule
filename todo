@@ -6,14 +6,24 @@ Client API:
 √ Store UserModel in database
 √ Create UserModel tests (unable to run due to bug in CB)
 
-
 GCM API Client:
- X Create GCMApiClient that communicates with GCM
+√ Create GCMApiClient that communicates with GCM
+X Parse response payload from GCM:
+  Remaining:
+  - retry_after
+  - provide message_id to successfully sent messages
+
+UserService:
+X gcm_api:send_message/4: Act upon response (e.g. replace old tokens, retry according to exponential backoff algorithm)
+
 
 Web API:
- X Create UI interface for creating push
- X Expose REST API containing 'sendPush' endpoint 
- X Fetch all stored UserModels and communicate to GCM through GCMApiClient
+X Create UI interface for creating push
+X Expose REST API containing 'sendPush' endpoint 
+X Fetch all stored UserModels and communicate to GCM through GCMApiClient
 
- MISC:
- - CLI access to underlying DB
+MISC:
+√ Create script from root (push_module) that loads ALL dependencies and runs all tests
+√ Create EUnit test suite
+√ Create Functional test suite for testing web controllers
+X CLI access to underlying DB

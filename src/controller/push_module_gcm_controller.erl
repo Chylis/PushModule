@@ -7,7 +7,7 @@
 
 % curl -v http://104.155.38.181:8001/gcm/registerToken -d {\"token\":\"mag\"}
 registerToken('POST', []) -> 
-  case request_utils:param_from_json("token", Req) of
+  case request_utils:param_from_request("token", Req) of
     undefined -> {400, ["Missing token"], []};
     Token     ->
       case user_service:persist_gcm_token(Token) of
@@ -20,7 +20,7 @@ registerToken(_, _) ->
 
 
 unregisterToken('POST', []) ->
-  case request_utils:param_from_json("token", Req) of
+  case request_utils:param_from_request("token", Req) of
     undefined -> {400, ["Missing token"], []};
     Token     -> 
       user_service:delete_gcm_token(Token),
