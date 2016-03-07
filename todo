@@ -8,13 +8,10 @@ Client API:
 
 GCM API Client:
 √ Create GCMApiClient that communicates with GCM
-X Parse response payload from GCM:
-  Remaining:
-  - retry_after
-  - provide message_id to successfully sent messages
+√ Parse response payload from GCM:
 
-UserService:
-X gcm_api:send_message/4: Act upon response (e.g. replace old tokens, retry according to exponential backoff algorithm)
+Call gcm_api:send_message/4 from somewhere (UserService?)
+X gcm_api:send_message/4: Act upon response (i.e., store message id,  replace old tokens, retry according to retry_after or exponential backoff algorithm)
 
 
 Web API:

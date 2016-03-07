@@ -31,16 +31,14 @@ create_multiple_receivers_request_test() ->
 handle_empty_result_response_test() ->
   Response = "{\"multicast_id\":123,\"success\":1,\"failure\":0,\"canonical_ids\":0}",
   Tokens = ["pass"],
-  {ok, TokenStatusList} = gcm_api:handle_response(Response, Tokens),
-
+  TokenStatusList = gcm_api:handle_response(Response, Tokens),
   ExpectedResult = [],
   ?assert(TokenStatusList == ExpectedResult).
 
 handle_successful_result_response_test() ->
   Response = "{\"multicast_id\":123,\"success\":1,\"failure\":0,\"canonical_ids\":0,\"results\":[{\"message_id\":\"0:145713\"}]}",
   Tokens = ["pass"],
-  {ok, TokenStatusList} = gcm_api:handle_response(Response, Tokens),
-
+  TokenStatusList = gcm_api:handle_response(Response, Tokens),
   ExpectedResult = [{"pass", {ok, "0:145713"}}],
   ?assert(TokenStatusList == ExpectedResult).
 
@@ -50,5 +48,5 @@ handle_mixed_result_response_test() ->
   ExpectedResult = [{"pass1", {ok, "0:14513"}}, {"fail_invalid_registration", remove}, {"fail_unavailable", retry}, {"fail_not_registered", remove}, {"fail_server_error", retry}, {"unhandled_error", error}, {"pass_but_replace", {{ok, "1:2342"}, {new_token, "32"}}}],
 
   Tokens = ["pass1", "fail_invalid_registration", "fail_unavailable", "fail_not_registered", "fail_server_error", "unhandled_error", "pass_but_replace"],
-  {ok, TokenStatusList} = gcm_api:handle_response(ResponseWithFailures, Tokens),
+  TokenStatusList = gcm_api:handle_response(ResponseWithFailures, Tokens),
   ?assert(ExpectedResult == TokenStatusList).

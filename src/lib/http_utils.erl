@@ -11,7 +11,7 @@ send_http_request(Method, Request, HttpOptions, Options) ->
 
   try httpc:request(Method, Request, HttpOptions, Options) of
     {ok, {{_HttpVersion, StatusCode, _StatusMessage}, ResponseHeaders, ResponseBody}}   -> {ok, {StatusCode, ResponseHeaders, ResponseBody}};
-    {ok, {StatusCode, ResponseBody}}                                                    -> {ok, {StatusCode, ResponseBody}};
+    {ok, {StatusCode, ResponseBody}}                                                    -> {ok, {StatusCode, [], ResponseBody}};
     {ok, saved_to_file}                                                                 -> {ok, saved_to_file};
     {ok, RequestId}                                                                     -> {ok, RequestId};
     {error, Reason}                                                                     -> {error, Reason}

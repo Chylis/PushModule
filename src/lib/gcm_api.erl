@@ -11,23 +11,22 @@
 
 % Attemps to send a message to GCM.
 % Returns a list of tuples, where each tuple is a token and its gcm status.
-% - {ok, [token, status]}, e.g. [{"12", ok} {"34", remove}, {"56", retry}, {"78", {new_token, "87"}] 
-% - {error {retry, Duration}} 
+% - {ok, {token_statuses, [token, status]}, {retry_after, (undefined | Value)}}, e.g. [{"12", ok} {"34", remove}, {"56", retry}, {"78", {new_token, "87"}] 
+% - {error {retry_after, (undefined | Duration)}} 
 % - {error, Reason}
 send_message(ApiKey, ReceiverTokens, MsgTitle, MsgBody) ->
   Request = create_request(ApiKey, ReceiverTokens, MsgTitle, MsgBody),
-
   case http_utils:send_http_request(post, Request, [], []) of
-    {ok, {200, Response}} -> 
-      handle_response(Response, ReceiverTokens);
-    {ok, {200, _Headers, Response}} -> 
-      handle_response(Response, ReceiverTokens);
-    {ok, {500, _Headers, _}} -> 
-      {error, {retry, duration}}; % Retryn after 'retry-after' header (if present), and implement exponential-backoff in retry mechanism.
+    {ok, {200, Headers, Response}} -> 
+      RetryAfter = proplists:get_value("Retry-After", Headers),
+      TokenStatusList = handle_response(Response, ReceiverTokens),
+      {ok, {token_statuses, TokenStatusList}, {retry_after, RetryAfter}};
+    {ok, {500, Headers, _}} -> 
+      RetryAfter = proplists:get_value("Retry-After", Headers),
+      {error, {retry_after, RetryAfter}};
     Other -> 
       {error, Other}
   end.
-
 
 %%%
 %%% Internal
@@ -60,7 +59,6 @@ create_payload_receiver([ReceiverToken]) ->
 create_payload_receiver(ReceiverTokens)  ->
   {registration_ids, {array, ReceiverTokens}}.
 
-
 % Handles the GCM response.
 % Returns a list of tuples, where each tuple is a token and its gcm status.
 % E.g. [{"12", {ok, "MessageId"} {"34", remove}, {"56", {retry, 60}}, {"78", {{ok, "MessageId"}, {new_token, "87"}}}, {"90", error} ]
@@ -80,12 +78,11 @@ create_payload_receiver(ReceiverTokens)  ->
 handle_response(RawResponse, OriginalTokens) ->
   {struct, Response} = mochijson:decode(RawResponse),
   case proplists:get_value("results", Response) of
-    undefined ->
-      {ok, []};
+    undefined -> [];
     {array, Results} ->
       HandledResults = handle_results(Results),
       TokenStatusList = lists:zip(OriginalTokens, HandledResults),
-      {ok, TokenStatusList}
+      TokenStatusList
   end.
 
 % Goes through each result from the gcm response body and checks its status.
