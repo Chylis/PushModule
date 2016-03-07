@@ -15,6 +15,7 @@ X gcm_api:send_message/4: Act upon response (i.e., store message id,  replace ol
 
 
 Web API:
+X Follow guide
 X Create UI interface for creating push
 X Expose REST API containing 'sendPush' endpoint 
 X Fetch all stored UserModels and communicate to GCM through GCMApiClient
@@ -24,3 +25,8 @@ MISC:
 √ Create EUnit test suite
 √ Create Functional test suite for testing web controllers
 X CLI access to underlying DB
+
+X Change format {atom, {{}, {}}}, to {atom, [{},{}]} 
+X Change name from user_model to user?
+X implement user_service:all_users/0
+

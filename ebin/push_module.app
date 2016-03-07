@@ -6,7 +6,11 @@
           push_module_outgoing_mail_controller,
           push_module_incoming_mail_controller,push_module_gcm_controller,
           push_module_sample_controller,user_model,push_module_custom_filters,
-          push_module_custom_tags,push_module_view_lib_tags]},
+          push_module_custom_tags,push_module_view_lib_tags,
+          push_module_view_sample_hello_html,
+          push_module_view_sample_create_html,
+          push_module_view_sample_list_html,
+          push_module_view_sample_live_html]},
      {registered,[]},
      {applications,[kernel,stdlib,crypto]},
      {env,
@@ -22,4 +26,8 @@
           {view_lib_helper_modules,
               [push_module_custom_filters,push_module_custom_tags]},
           {view_lib_tags_modules,[push_module_view_lib_tags]},
-          {view_modules,[]}]}]}.
+          {view_modules,
+              [push_module_view_sample_hello_html,
+               push_module_view_sample_create_html,
+               push_module_view_sample_list_html,
+               push_module_view_sample_live_html]}]}]}.

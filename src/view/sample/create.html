@@ -1,0 +1,21 @@
+{% extends "sample/list.html" %}
+<!--  
+The 'extends' tag allows the create.html template to insert its own content into the title and body blocks defined in list.html. 
+This way we don't need to redefine the HTML <head>, <title>, and <body> tags in every template.
+-->
+
+{% block title %}Register a new token{% endblock %}
+{% block body %}
+{% if errors %}
+<ul>
+  {% for error in errors %}
+    <li><font color=red>{{ error }}</font>
+  {% endfor %}
+</ul>
+{% endif %}
+<form method="post">
+  Enter a new token:
+  <textarea name="token"></textarea>
+  <input type="submit">
+</form>
+{% endblock %}

@@ -23,6 +23,9 @@ before_create() ->
   ModifiedUser = set([{created_at, Now}, {updated_at, Now}]),
   {ok, ModifiedUser}.
 
+after_create() ->
+  boss_mq:push("new-users", THIS).
+
 before_update() ->
   Now = calendar:now_to_universal_time(erlang:now()),
   ModifiedUser = set([{updated_at, Now}]),

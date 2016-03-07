@@ -1,0 +1,29 @@
+<html>
+<head>
+  <title>Fresh users!</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+  <script>
+function listen_for_events(timestamp) {
+  $.ajax("/sample/pull/"+timestamp, { success:
+    function(data, code, xhr) {
+      for (var i=0; i<data.users.length; i++) {
+        var msg = data.users[i].gcm_token;
+        $("#user_list").append("<li>"+msg);
+      }
+      listen_for_events(data.timestamp);
+    } });
+}
+$(document).ready(function() {
+  listen_for_events({{ timestamp }});
+});
+  </script>
+</head>
+<body>
+  Users:
+  <ul id="user_list">
+    {% for user in users %}
+    <li>{{ user.gcm_token}}
+        {% endfor %}
+  </ul>
+</body>
+</html>
