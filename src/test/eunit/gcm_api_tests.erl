@@ -28,20 +28,27 @@ create_multiple_receivers_request_test() ->
   ?assert(Request == ExpectedResult).
 
 
-handle_successful_response_test() ->
-  Response = "{\"multicast_id\":123,\"success\":1,\"failure\":0,\"canonical_ids\":0,\"results\":[{\"message_id\":\"0:145713\"}]}",
+handle_empty_result_response_test() ->
+  Response = "{\"multicast_id\":123,\"success\":1,\"failure\":0,\"canonical_ids\":0}",
   Tokens = ["pass"],
   {ok, TokenStatusList} = gcm_api:handle_response(Response, Tokens),
 
   ExpectedResult = [],
   ?assert(TokenStatusList == ExpectedResult).
 
-handle_response_with_failures_test() ->
-  ResponseWithFailures = "{\"multicast_id\":4603,\"success\":3,\"failure\":4,\"canonical_ids\":1,\"results\":[{\"message_id\":\"0:14513\"},{\"error\":\"InvalidRegistration\"},{\"error\":\"Unavailable\"},{\"error\":\"NotRegistered\"},{\"error\":\"InternalServerError\"},{\"message_id\":\"1:1516\"},[{\"message_id\":\"1:2342\"},{\"registration_id\":\"32\"}]]}",
+handle_successful_result_response_test() ->
+  Response = "{\"multicast_id\":123,\"success\":1,\"failure\":0,\"canonical_ids\":0,\"results\":[{\"message_id\":\"0:145713\"}]}",
+  Tokens = ["pass"],
+  {ok, TokenStatusList} = gcm_api:handle_response(Response, Tokens),
 
-  ExpectedResult = [{"pass1", ok}, {"fail_invalid_registration", remove}, {"fail_unavailable", retry}, {"fail_not_registered", remove}, {"fail_server_error", retry}, {"pass2", ok}, {"pass_but_replace", {replace, "32"}}],
+  ExpectedResult = [{"pass", {ok, "0:145713"}}],
+  ?assert(TokenStatusList == ExpectedResult).
 
-  Tokens = ["pass1", "fail_invalid_registration", "fail_unavailable", "fail_not_registered", "fail_server_error", "pass2", "pass_but_replace"],
+handle_mixed_result_response_test() ->
+  ResponseWithFailures = "{\"multicast_id\":4603,\"success\":2,\"failure\":5,\"canonical_ids\":1,\"results\":[{\"message_id\":\"0:14513\"},{\"error\":\"InvalidRegistration\"},{\"error\":\"Unavailable\"},{\"error\":\"NotRegistered\"},{\"error\":\"InternalServerError\"},{\"error\":\"UnhandledError\"},[{\"message_id\":\"1:2342\"},{\"registration_id\":\"32\"}]]}",
+
+  ExpectedResult = [{"pass1", {ok, "0:14513"}}, {"fail_invalid_registration", remove}, {"fail_unavailable", retry}, {"fail_not_registered", remove}, {"fail_server_error", retry}, {"unhandled_error", error}, {"pass_but_replace", {{ok, "1:2342"}, {new_token, "32"}}}],
+
+  Tokens = ["pass1", "fail_invalid_registration", "fail_unavailable", "fail_not_registered", "fail_server_error", "unhandled_error", "pass_but_replace"],
   {ok, TokenStatusList} = gcm_api:handle_response(ResponseWithFailures, Tokens),
-
   ?assert(ExpectedResult == TokenStatusList).

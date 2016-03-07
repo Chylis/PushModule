@@ -11,7 +11,7 @@
 
 % Attemps to send a message to GCM.
 % Returns a list of tuples, where each tuple is a token and its gcm status.
-% - {ok, [token, status]}, e.g. [{"12", ok} {"34", remove}, {"56", retry}, {"78", {replace, "87"}] 
+% - {ok, [token, status]}, e.g. [{"12", ok} {"34", remove}, {"56", retry}, {"78", {new_token, "87"}] 
 % - {error {retry, Duration}} 
 % - {error, Reason}
 send_message(ApiKey, ReceiverTokens, MsgTitle, MsgBody) ->
@@ -20,9 +20,9 @@ send_message(ApiKey, ReceiverTokens, MsgTitle, MsgBody) ->
   case http_utils:send_http_request(post, Request, [], []) of
     {ok, {200, Response}} -> 
       handle_response(Response, ReceiverTokens);
-    {ok, {200, Headers, Response}} -> 
+    {ok, {200, _Headers, Response}} -> 
       handle_response(Response, ReceiverTokens);
-    {ok, {500, Headers, _}} -> 
+    {ok, {500, _Headers, _}} -> 
       {error, {retry, duration}}; % Retryn after 'retry-after' header (if present), and implement exponential-backoff in retry mechanism.
     Other -> 
       {error, Other}
@@ -63,7 +63,7 @@ create_payload_receiver(ReceiverTokens)  ->
 
 % Handles the GCM response.
 % Returns a list of tuples, where each tuple is a token and its gcm status.
-% E.g. [{"12", ok} {"34", remove}, {"56", {retry, 60}}, {"78", {replace, "87"} ]
+% E.g. [{"12", {ok, "MessageId"} {"34", remove}, {"56", {retry, 60}}, {"78", {{ok, "MessageId"}, {new_token, "87"}}}, {"90", error} ]
 
 % Param Response = 
 % {struct,[
@@ -79,15 +79,13 @@ create_payload_receiver(ReceiverTokens)  ->
 %        ]}}
 handle_response(RawResponse, OriginalTokens) ->
   {struct, Response} = mochijson:decode(RawResponse),
-  Success = proplists:get_value("failure", Response) == 0 andalso proplists:get_value("canonical_ids", Response) == 0,
-  if 
-    Success == false ->
-       {array, Results} = proplists:get_value("results", Response),
-       HandledResults = handle_results(Results),
-       TokenStatusList = lists:zip(OriginalTokens, HandledResults),
-       {ok, TokenStatusList};
-    true ->
-      {ok, []}
+  case proplists:get_value("results", Response) of
+    undefined ->
+      {ok, []};
+    {array, Results} ->
+      HandledResults = handle_results(Results),
+      TokenStatusList = lists:zip(OriginalTokens, HandledResults),
+      {ok, TokenStatusList}
   end.
 
 % Goes through each result from the gcm response body and checks its status.
@@ -106,9 +104,11 @@ handle_results([ {array, Result } | T ], HandledResults) ->
   handle_results(T, [HandledResult | HandledResults]).
 
 % Handles a single result entry.
-% Returns: ok | remove | {retry, durationSeconds} | {replace, <NewToken>}
-handle_result([{struct, [{"message_id", _}]}, {struct, [{"registration_id", NewId}]}]) ->
-  {replace, NewId};
+% Returns: error | remove | {retry, durationSeconds} | {ok, <MsgId> } | {{ok, <MsgId>}, {new_token, <NewToken>}}
+handle_result([{struct, [{"message_id", MsgId}]}, {struct, [{"registration_id", NewId}]}]) ->
+  {{ok, MsgId}, {new_token, NewId}};
+handle_result([{"message_id", MsgId}]) ->
+  {ok, MsgId};
 handle_result([{"error", "Unavailable"}]) ->
   retry;
 handle_result([{"error", "InternalServerError"}]) ->
@@ -117,6 +117,6 @@ handle_result([{"error", "NotRegistered"}]) ->
   remove;
 handle_result([{"error", "InvalidRegistration"}]) ->
   remove;
-handle_result(Result) ->
-  ok.
+handle_result(_Result) ->
+  error.
 
