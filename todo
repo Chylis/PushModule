@@ -1,10 +1,17 @@
-Client API:
+Backend:
+
+Mobile Client API:
 √ Expose registerGCMToken endpoint
 √ Expose unregisterGCMToken endpoint
 √ Create test suite for endpoint 
 √ Create TokenModel with validation 
 √ Store UserModel in database
 √ Create UserModel tests (unable to run due to bug in CB)
+
+Web Client API:
+X Expose 'createmessage' endpoint
+X Expose REST API containing 'sendPush' endpoint 
+X Fetch all stored UserModels and communicate to GCM through GCMApiClient
 
 GCM API Client:
 √ Create GCMApiClient that communicates with GCM
@@ -14,19 +21,31 @@ Call gcm_api:send_message/4 from somewhere (UserService?)
 X gcm_api:send_message/4: Act upon response (i.e., store message id,  replace old tokens, retry according to retry_after or exponential backoff algorithm)
 
 
-Web API:
-X Follow guide
+#########
+#########
+#########
+
+Frontend:
+
+Web Client:
+√ Bootstrap
+X Write specification, user stories, etc
+X Login
 X Create UI interface for creating push
-X Expose REST API containing 'sendPush' endpoint 
-X Fetch all stored UserModels and communicate to GCM through GCMApiClient
+
+
+#########
+#########
+#########
 
 MISC:
 √ Create script from root (push_module) that loads ALL dependencies and runs all tests
 √ Create EUnit test suite
 √ Create Functional test suite for testing web controllers
-X CLI access to underlying DB
+
+X cb_admin 
+X Upgrade to CB 0.9 in order to run the latest erlang (18)
 
 X Change format {atom, {{}, {}}}, to {atom, [{},{}]} 
 X Change name from user_model to user?
 X implement user_service:all_users/0
-

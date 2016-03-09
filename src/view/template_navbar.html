@@ -1,0 +1,25 @@
+{% extends "template_base.html" %}
+
+<!-- 
+  Navbar template that all templates that want are in the default navbar should extend.
+  Possible extension points are:
+    - block title
+    - block body
+-->
+
+{% block head %}
+
+<nav class = "navbar navbar-default navbar-static-top" role = "navigation">
+<div class = "navbar-header">
+  <a class = "navbar-brand" href = "#">Push notifications</a>
+</div>
+<div>
+  <ul class = "nav navbar-nav">
+    <li class = "active"> <a href = "#">Compose
+        <span class="glyphicon glyphicon-comment"></span>
+      </a>
+    </li>
+</div>
+</nav>
+
+{% endblock %}
