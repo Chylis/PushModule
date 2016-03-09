@@ -1,4 +1,4 @@
--module(user_model, [Id, GcmToken, CreatedAt, UpdatedAt]).
+-module(device, [Id, GcmToken, CreatedAt, UpdatedAt]).
 -compile(export_all).
 
 %%%============================================================================
@@ -20,13 +20,13 @@ validation_tests() ->
 
 before_create() ->
   Now = calendar:now_to_universal_time(erlang:now()),
-  ModifiedUser = set([{created_at, Now}, {updated_at, Now}]),
-  {ok, ModifiedUser}.
+  ModifiedDevice= set([{created_at, Now}, {updated_at, Now}]),
+  {ok, ModifiedDevice}.
 
 after_create() ->
-  boss_mq:push("new-users", THIS).
+  boss_mq:push("new-devices", THIS).
 
 before_update() ->
   Now = calendar:now_to_universal_time(erlang:now()),
-  ModifiedUser = set([{updated_at, Now}]),
-  {ok, ModifiedUser}.
+  ModifiedDevice= set([{updated_at, Now}]),
+  {ok, ModifiedDevice}.

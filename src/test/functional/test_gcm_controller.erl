@@ -8,7 +8,7 @@ start() ->
                              [ 
                               fun boss_assert:http_ok/1,
                               fun(Res) -> 
-                                  TokenWasStored = boss_db:find_first(user_model, [{gcm_token, "mag"}]) =/= undefined,
+                                  TokenWasStored = boss_db:find_first(device, [{gcm_token, "mag"}]) =/= undefined,
                                   {TokenWasStored, "Failed to persist token"}
                               end
                              ], 
@@ -20,7 +20,7 @@ start() ->
                                                              [ 
                                                               fun boss_assert:http_ok/1,
                                                               fun(Res) -> 
-                                                                  TokenWasRemoved = boss_db:find_first(user_model, [{gcm_token, "mag"}]) == undefined,
+                                                                  TokenWasRemoved = boss_db:find_first(device, [{gcm_token, "mag"}]) == undefined,
                                                                   {TokenWasRemoved, "Failed to remove token"}
                                                               end
                                                              ], [])

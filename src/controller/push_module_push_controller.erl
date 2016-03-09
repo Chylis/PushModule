@@ -1,23 +1,46 @@
 %This controller module is a parameterized module, as indicated by the parameter list ([Req]) in the -module directive. 
 %This means that every function will have access to the Req variable, which has a lot of useful information about the current request.
--module(push_module_sample_controller, [Req]).
+-module(push_module_push_controller, [Req]).
 -compile(export_all).
 
-
-
-
-
-%Each action (i.e. 'hello') will have its own URL of the form /<controller name>/<action name>. 
+%Each action (i.e. 'new_message') will have its own URL of the form /<controller name>/<action name>. 
 %If the URL contains additional slash-separated tokens beyond the action name, these will be passed as a list to
 %the controller action in the second argument.
 
 %Controller actions can return several values. The simplest is {output, Value}, and it returns raw HTML. 
 %We can also use {json, Values} to return JSON: {json, [{greeting, "Hello, world!"}]}.
-hello('GET', []) ->
-  {ok, [{greeting, "Mag says hello!"}]}. 
+
+
+% Gets the new_message page
+new_message('GET', []) ->
+  ok.
+
+
+%%%
+%%% To be added
+%%%
+% -  send POST
+% -   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%
+%%% Temporary / To be removed
+%%%
 
 list('GET', []) ->
-  Tokens = boss_db:find(user_model, []),
+  Tokens = boss_db:find(device, []),
   {ok, [{tokens, Tokens}]}.
 
 
@@ -25,29 +48,26 @@ create('GET', []) ->
    ok;
 create('POST', []) ->
   Token = Req:post_param("token"),
-  case user_service:persist_gcm_token(Token) of
-    {ok, _SavedUser} -> {redirect, [{action, "list"}]};
+  case device_service:persist_gcm_token(Token) of
+    {ok, _SavedDevice} -> {redirect, [{action, "list"}]};
     {error, ErrorsList} -> {ok, [{errors, ErrorsList}]} 
   end.
 
 delete('POST', []) ->
   Token = Req:post_param("token_id"),
   Token2 = request_utils:param_from_request("token_id", Req),
-  user_service:delete_gcm_token(Token),
+  device_service:delete_device_with_gcm_token(Token),
   {redirect, [{action, "list"}]}.
 
 
 pull('GET', [LastTimestamp]) ->
- {ok, Timestamp, Users} = boss_mq:pull("new-users", list_to_integer(LastTimestamp)), % Fetch all new messages since LastTimestamp
- {json, [{timestamp, Timestamp}, {users, Users}]}.
+ {ok, Timestamp, Devices} = boss_mq:pull("new-devices", list_to_integer(LastTimestamp)), % Fetch all new messages since LastTimestamp
+ {json, [{timestamp, Timestamp}, {devices, Devices}]}.
 
 live('GET', []) ->
-  Users = boss_db:find(user_model, []),
-  Timestamp = boss_mq:now("new-users"),
-  {ok, [{users, Users}, {timestamp, Timestamp}]}.
-
-
-
+  Devices = boss_db:find(device, []),
+  Timestamp = boss_mq:now("new-devices"),
+  {ok, [{devices, Devices}, {timestamp, Timestamp}]}.
 
 send('GET', []) ->
   ServerToken = "AIzaSyCA817K5DPHsfC9NAezrOfKm07KpeiYduw", 

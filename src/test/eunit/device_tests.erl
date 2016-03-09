@@ -1,4 +1,4 @@
--module(user_model_tests).
+-module(device_tests).
 -include_lib("eunit/include/eunit.hrl").
 
 %%%============================================================================
@@ -16,18 +16,18 @@ tests() ->
   ].
 
 val_gcm_token() ->
-  User = boss_record:new(user_model, []),
-  ?assertEqual({error, [{gcm_token, "Required"}]}, User:save()),
+  Device = boss_record:new(device, []),
+  ?assertEqual({error, [{gcm_token, "Required"}]}, Device:save()),
 
-  User2 = User:set([{gcm_token, "token123"}]),
-  {Res, _} = User2:save(),
+  Device2 = Device:set([{gcm_token, "token123"}]),
+  {Res, _} = Device2:save(),
   ?assertEqual(ok, Res).
 
 val_gen_dates() ->
-  User = boss_record:new(user_model, [{gcm_token, "token123"}]),
-  {ok, SavedUser} = User:save(),
-  ?assertNotEqual(undefined, SavedUser:created_at()),
-  ?assertNotEqual(undefined, SavedUser:updated_at()).
+  Device = boss_record:new(device, [{gcm_token, "token123"}]),
+  {ok, SavedDevice} = Device:save(),
+  ?assertNotEqual(undefined, SavedDevice:created_at()),
+  ?assertNotEqual(undefined, SavedDevice:updated_at()).
 
 
 %% ===================================================================

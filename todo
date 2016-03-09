@@ -1,51 +1,80 @@
+############################################################
+
 Backend:
 
 Mobile Client API:
+/gcm/:
 √ Expose registerGCMToken endpoint
 √ Expose unregisterGCMToken endpoint
 √ Create test suite for endpoint 
 √ Create TokenModel with validation 
-√ Store UserModel in database
-√ Create UserModel tests (unable to run due to bug in CB)
+√ Store DeviceModel in database
+√ Create DeviceModel tests (unable to run due to bug in CB)
+
+
+############################################################
+
 
 Web Client API:
-X Expose 'createmessage' endpoint
-X Expose REST API containing 'sendPush' endpoint 
-X Fetch all stored UserModels and communicate to GCM through GCMApiClient
+/push/
+X Expose 'create' endpoint
+X Expose REST API containing 'send' endpoint (Fetch all stored device and communicate to GCM through GCMApiClient)
+X Call gcm_api:send_message/4 from somewhere (UserService?)
+X gcm_api:send_message/4: Act upon response (i.e., store message id,  replace old tokens, retry according to retry_after or exponential backoff algorithm)
+
+
+############################################################
+
 
 GCM API Client:
 √ Create GCMApiClient that communicates with GCM
 √ Parse response payload from GCM:
 
-Call gcm_api:send_message/4 from somewhere (UserService?)
-X gcm_api:send_message/4: Act upon response (i.e., store message id,  replace old tokens, retry according to retry_after or exponential backoff algorithm)
 
+############################################################
 
-#########
-#########
-#########
 
 Frontend:
 
+Specification, user stories, etc:
+X Send push to all
+X View sent messages and status
+X Log in
+X Log out
+X View users / registered devices/tokens
+X Schedule push for a future date
+X View scheduled messages
+
+
+Future specifications:
+X Group users into different groups
+X Send push to specific user groups
+X Geolocation
+X Send push to users at certain locations
+
+
+############################################################
+
+
 Web Client:
 √ Bootstrap
-X Write specification, user stories, etc
+√ Create UI interface for creating push
+X Make UI interface talk to backend
 X Login
-X Create UI interface for creating push
 
 
-#########
-#########
-#########
+############################################################
+
 
 MISC:
 √ Create script from root (push_module) that loads ALL dependencies and runs all tests
 √ Create EUnit test suite
 √ Create Functional test suite for testing web controllers
-
+X Change format {atom, {{}, {}}}, to {atom, [{},{}]} 
+√ Change name from user_model to device
+√ rename user_service to device_service?
+X implement user_service:all_users/0
 X cb_admin 
 X Upgrade to CB 0.9 in order to run the latest erlang (18)
 
-X Change format {atom, {{}, {}}}, to {atom, [{},{}]} 
-X Change name from user_model to user?
-X implement user_service:all_users/0
+############################################################

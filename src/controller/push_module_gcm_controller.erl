@@ -10,7 +10,7 @@ registerToken('POST', []) ->
   case request_utils:param_from_request("token", Req) of
     undefined -> {400, ["Missing token"], []};
     Token     ->
-      case user_service:persist_gcm_token(Token) of
+      case device_service:persist_gcm_token(Token) of
         {ok, _}                     -> {200, [], []};
         {error, ErrorMessages}      -> {500, ErrorMessages, []}
       end
@@ -23,7 +23,7 @@ unregisterToken('POST', []) ->
   case request_utils:param_from_request("token", Req) of
     undefined -> {400, ["Missing token"], []};
     Token     -> 
-      user_service:delete_gcm_token(Token),
+      device_service:delete_device_with_gcm_token(Token),
       {200, [], []}
   end;
 unregisterToken(_,_) ->
