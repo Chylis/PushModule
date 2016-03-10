@@ -1,14 +1,26 @@
+%%-------------------------------------------------------------------
+%% @author 
+%%     ChicagoBoss Team and contributors, see AUTHORS file in root directory
+%% @end
+%% @copyright 
+%%     This file is part of ChicagoBoss project. 
+%%     See AUTHORS file in root directory
+%%     for license information, see LICENSE file in root directory
+%% @end
+%% @doc 
+%%-------------------------------------------------------------------
+
 -module(boss_files).
 -export([
-	websocket_list/1,
-	websocket_mapping/3,
+        websocket_list/1,
+        websocket_mapping/3,
         dot_app_src/1,
-                    init_file_list/1, language_list/1, mail_controller_path/0,
+        init_file_list/1, language_list/1, mail_controller_path/0,
         model_list/1,
         lib_module_list/1,
         routes_file/1,
         root_priv_dir/1, view_file_list/0,
-                                                        view_module_list/1,
+        view_module_list/1,
         compiler_adapter_for_extension/1,
         template_adapter_for_extension/1,
         template_extensions/0,
@@ -28,11 +40,11 @@
 -spec root_priv_dir(_) -> input_string().
 -spec websocket_mapping(_,_,[any()]) -> any().
 -spec mail_controller_path() -> [input_string(),...].
--spec websocket_list(_) -> [any()].
--spec model_list(_) -> [any()].
--spec lib_module_list(_) -> [any()].
--spec web_controller_list(_) -> [any()].
--spec view_module_list(_) -> [string()].
+-spec websocket_list(atom()) -> [any()].
+-spec model_list(atom()) -> [any()].
+-spec lib_module_list(atom()) -> [any()].
+-spec web_controller_list(atom() | string()) -> [any()].
+-spec view_module_list(atom()) -> [string()].
 -spec is_controller_present(_,_,_) -> boolean().
 -spec web_controller(_,_,_) -> any().
 -spec compiler_adapter_for_extension(_) -> any().
@@ -40,12 +52,12 @@
 -spec adapter_for_extension(_,['boss_compiler_adapter_elixir' | 'boss_compiler_adapter_erlang' | 'boss_compiler_adapter_lfe' | 'boss_template_adapter_eex' | 'boss_template_adapter_erlydtl' | 'boss_template_adapter_jade',...]) -> any().
 -spec template_extensions() -> any().
 -spec view_file_list() -> [any()].
--spec init_file_list(_) -> [string()].
+-spec init_file_list(atom()) -> [string()].
 -spec routes_file(atom() | string() | number()) -> input_string().
--spec language_list(_) -> [input_string()].
+-spec language_list(atom()) -> [string()].
 -spec language_list_dir(input_string()) -> [input_string()].
 -spec dot_app_src(atom() | string() | number()) -> input_string().
--spec model_list(_,[input_string(),...]) -> [any()].
+-spec model_list(atom(),[string(),...]) -> [any()].
 
 -spec find_file(input_string()) -> [string()].
 -spec find_file(input_string(),[]) -> [string()].
@@ -63,21 +75,21 @@ root_priv_dir(App) ->
    end.
 websocket_mapping(BaseURL, AppName, Modules) ->
     lists:foldl(fun([], Acc) -> Acc;
-		   (M, Acc) -> 
-			L1 = string:len(AppName) + 1,
-		        L2 = string:len(M),
-			L3 = string:len("_websocket"),
-			Service = string:substr(M, 
-				      L1 + 1, 
-				      L2 - (L1+L3)),
-			Url = case BaseURL of
-				  "/" ->
-				      string:join(["/websocket", Service],"/");
-				  _ ->
-				      string:join([BaseURL, "websocket", Service],"/")
-			      end,			
-			Acc ++ [{list_to_binary(Url), list_to_atom(M)}]			
-		end, [], Modules).
+           (M, Acc) -> 
+            L1 = string:len(AppName) + 1,
+                L2 = string:len(M),
+            L3 = string:len("_websocket"),
+            Service = string:substr(M, 
+                      L1 + 1, 
+                      L2 - (L1+L3)),
+            Url = case BaseURL of
+                  "/" ->
+                      string:join(["/websocket", Service],"/");
+                  _ ->
+                      string:join([BaseURL, "websocket", Service],"/")
+                  end,            
+            Acc ++ [{list_to_binary(Url), list_to_atom(M)}]            
+        end, [], Modules).
 
 mail_controller_path() -> [filename:join([boss_files_util:root_src_dir(), "mail"])].
 
@@ -192,7 +204,7 @@ language_list_dir(Path) ->
     end.
 
 dot_app_src(AppName) ->
-	filename:join(["src", lists:concat([AppName, ".app.src"])]).
+    filename:join(["src", lists:concat([AppName, ".app.src"])]).
 
 % add sub folder, ex: 100 models need sub folder
 % don't want to change the behavior for other module
@@ -215,12 +227,12 @@ make_extentions() ->
     
 
 -spec(make_extentions([types:compiler_adapters()]) ->
-	     [{string(), types:compiler_adapters()}]).
+         [{string(), types:compiler_adapters()}]).
 make_extentions(CompilerAdapters) ->
     lists:foldl(fun (Adapter, Acc) ->
-			lists:map(fun(Ext) -> {Ext, Adapter} end, 
-				  Adapter:file_extensions()) ++ Acc
-		end, [], CompilerAdapters).
+            lists:map(fun(Ext) -> {Ext, Adapter} end, 
+                  Adapter:file_extensions()) ++ Acc
+        end, [], CompilerAdapters).
 
 
 make_modules(Dir, Application, ModuleAcc, ExtensionProplist) ->
@@ -229,14 +241,14 @@ make_modules(Dir, Application, ModuleAcc, ExtensionProplist) ->
 
 make_modules_itterator(ExtensionProplist, Application) ->
     fun ("." ++ _, Acc) -> Acc;
-	(File, Acc) ->
-	    case filename:extension(File) of
-		[$. |Extension] ->
-		    AdapterVal = proplists:get_value(Extension, ExtensionProplist),
-		    lookup_module_by_adapater(Application, File, Acc,
-					      AdapterVal);
-		_ -> []
-	    end
+    (File, Acc) ->
+        case filename:extension(File) of
+        [$. |Extension] ->
+            AdapterVal = proplists:get_value(Extension, ExtensionProplist),
+            lookup_module_by_adapater(Application, File, Acc,
+                          AdapterVal);
+        _ -> []
+        end
     end.
 
 
@@ -250,7 +262,7 @@ find_file(Dir) ->
 
 find_file(Dir, ModuleAcc) ->
     case file:list_dir(Dir) of
-        {ok, Files} ->                              
+        {ok, Files} ->
             find_file(Files, Dir, [], ModuleAcc);
         _ -> 
             ModuleAcc
@@ -258,15 +270,11 @@ find_file(Dir, ModuleAcc) ->
 
 find_file([], _, Acc, _ModuleAcc) -> Acc;
 find_file([H|T], Root, Acc, ModuleAcc) -> 
-    Path	= filename:join(Root, H),
-    IsDir	= filelib:is_dir(Path),
+    Path    = filename:join(Root, H),
+    IsDir    = filelib:is_dir(Path),
     case IsDir of
         false ->
             find_file(T, Root, [Path] ++ Acc,                     ModuleAcc);
         true ->
             find_file(T, Root, find_file(Path, ModuleAcc) ++ Acc, ModuleAcc)
     end.
-    
-	
-	
-

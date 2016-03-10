@@ -1,3 +1,15 @@
+%%-------------------------------------------------------------------
+%% @author 
+%%     ChicagoBoss Team and contributors, see AUTHORS file in root directory
+%% @end
+%% @copyright 
+%%     This file is part of ChicagoBoss project. 
+%%     See AUTHORS file in root directory
+%%     for license information, see LICENSE file in root directory
+%% @end
+%% @doc 
+%%-------------------------------------------------------------------
+
 -module(boss_smtp_server).
 -behaviour(gen_smtp_server_session).
 
@@ -126,7 +138,7 @@ handle_DATA(FromAddress, ToAddressList, _Data, State) ->
     reply_with_errors(FromAddress, ToAddressList, State).
 
 reply_with_errors(_FromAddress, _ToAddressList, #state{ errors = [] } = State) ->
-    Reference = lists:flatten([io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary(erlang:now()))]),
+    Reference = lists:flatten([io_lib:format("~2.16.0b", [X]) || <<X>> <= erlang:md5(term_to_binary(os:timestamp()))]),
     {ok, Reference, State};
 reply_with_errors(FromAddress, ToAddressList, #state{ errors = Errors } = State) ->
     FirstAddress = hd(ToAddressList),

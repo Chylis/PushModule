@@ -1,3 +1,15 @@
+%%-------------------------------------------------------------------
+%% @author 
+%%     ChicagoBoss Team and contributors, see AUTHORS file in root directory
+%% @end
+%% @copyright 
+%%     This file is part of ChicagoBoss project. 
+%%     See AUTHORS file in root directory
+%%     for license information, see LICENSE file in root directory
+%% @end
+%% @doc 
+%%-------------------------------------------------------------------
+
 -module(boss_session_mock_controller).
 -behaviour(gen_server).
 
@@ -120,6 +132,6 @@ prune_expired_sessions(#state{ ttl_tree = Tree, session_dict = Dict, table = Tab
     State#state{ ttl_tree = NewTree, session_dict = NewDict }.
 
 now_seconds() ->
-    {A, B, _} = erlang:now(),
+    {A, B, _} = os:timestamp(),
     A * 1000 * 1000 + B.
 

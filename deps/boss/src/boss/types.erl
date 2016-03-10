@@ -1,9 +1,21 @@
+%%-------------------------------------------------------------------
+%% @author 
+%%     ChicagoBoss Team and contributors, see AUTHORS file in root directory
+%% @end
+%% @copyright 
+%%     This file is part of ChicagoBoss project. 
+%%     See AUTHORS file in root directory
+%%     for license information, see LICENSE file in root directory
+%% @end
+%% @doc 
+%%-------------------------------------------------------------------
+
 -module(types).
 
--type execution_mode()		:: 'development' | 'production'.
--type application()  	        :: atom().
--type language()		:: any().
--type webserver()               :: 'cowboy' | 'mochiweb_http'.
+-type execution_mode()        :: 'development' | 'production'.
+-type application()              :: atom().
+-type language()        :: any().
+-type webserver()               :: any().
 -type cb_node()                 :: node().
 -type controller()              :: any().
 -type compiler_adapters() :: 'boss_compiler_adapter_elixir' | 'boss_compiler_adapter_erlang' | 'boss_compiler_adapter_lfe'.

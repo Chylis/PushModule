@@ -1,6 +1,15 @@
-%% Author: jgordor
-%% Created: 01/04/2011
-%% Description: Minimalist Router system for Chicago Boss
+%%-------------------------------------------------------------------
+%% @author 
+%%     ChicagoBoss Team and contributors, see AUTHORS file in root directory
+%% @end
+%% @copyright 
+%%     This file is part of ChicagoBoss project. 
+%%     See AUTHORS file in root directory
+%%     for license information, see LICENSE file in root directory
+%% @end
+%% @doc Minimalist Router system for Chicago Boss
+%%-------------------------------------------------------------------
+
 -module(boss_router).
 -behaviour(boss_router_adapter).
 
@@ -24,11 +33,10 @@ start(Options) ->
 stop() ->
     ok.
 
-reload(Pid) ->	
+reload(Pid) ->    
     gen_server:call(Pid, reload).
 
 route(Pid, Url) ->
-	error_logger:info_msg("Route: ~pUrl~n~p",[Url, erlang:get_stacktrace()]),
     gen_server:call(Pid, {route, Url}).
 
 unroute(Pid, Application, ControllerList, Controller, undefined, Params) ->

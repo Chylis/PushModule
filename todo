@@ -67,6 +67,7 @@ X Login
 
 
 MISC:
+X start application inets and ssl from startup script
 √ Create script from root (push_module) that loads ALL dependencies and runs all tests
 √ Create EUnit test suite
 √ Create Functional test suite for testing web controllers

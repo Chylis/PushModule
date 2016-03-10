@@ -59,15 +59,18 @@ delete('POST', []) ->
   device_service:delete_device_with_gcm_token(Token),
   {redirect, [{action, "list"}]}.
 
-
-pull('GET', [LastTimestamp]) ->
- {ok, Timestamp, Devices} = boss_mq:pull("new-devices", list_to_integer(LastTimestamp)), % Fetch all new messages since LastTimestamp
- {json, [{timestamp, Timestamp}, {devices, Devices}]}.
-
+% Initially called by client retrieve all devices and a timestamp
 live('GET', []) ->
   Devices = boss_db:find(device, []),
   Timestamp = boss_mq:now("new-devices"),
   {ok, [{devices, Devices}, {timestamp, Timestamp}]}.
+
+% Called by client on a separate thread, blocks until new devices are available.
+% Param timestamp is initially obtained from 'GET live' 
+pull('GET', [LastTimestamp]) ->
+ {ok, Timestamp, Devices} = boss_mq:pull("new-devices", list_to_integer(LastTimestamp)), % Fetch all new messages since LastTimestamp
+ {json, [{timestamp, Timestamp}, {devices, Devices}]}.
+
 
 send('GET', []) ->
   ServerToken = "AIzaSyCA817K5DPHsfC9NAezrOfKm07KpeiYduw", 

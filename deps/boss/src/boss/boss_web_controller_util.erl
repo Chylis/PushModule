@@ -1,3 +1,15 @@
+%%-------------------------------------------------------------------
+%% @author 
+%%     ChicagoBoss Team and contributors, see AUTHORS file in root directory
+%% @end
+%% @copyright 
+%%     This file is part of ChicagoBoss project. 
+%%     See AUTHORS file in root directory
+%%     for license information, see LICENSE file in root directory
+%% @end
+%% @doc 
+%%-------------------------------------------------------------------
+
 -module(boss_web_controller_util).
 
 -export([start_boss_applications/3]).
@@ -22,7 +34,7 @@ start_boss_applications( Applications, ServicesSupPid, #state{router_adapter=Rou
                                         [] -> case boss_env:is_developing_app(AppName) of
                                                 true  -> [];
                                                 false -> 
-                                                    lager:warning("App ~p doesn't seem to have controllers defined,~n"
+                                                    _ = lager:warning("App ~p doesn't seem to have controllers defined,~n"
                                                                   "check your config file at section <~p:controller_modules>,~n"
                                                                   "have you compiled your CB application?",[AppName, AppName]), 
                                                     []
@@ -69,23 +81,17 @@ init_app_load_on_dev(AppName, TranslatorSupPid) ->
 enable_master_apps(ServicesSupPid, AppName, BaseURL, IsMasterNode) ->
     if
         IsMasterNode ->
-            case boss_env:get_env(server, ?DEFAULT_WEB_SERVER) of
-                cowboy ->
-                    WebSocketModules = boss_files:websocket_list(AppName),
-                    MappingServices  = boss_files:websocket_mapping(BaseURL,
-                        atom_to_list(AppName),
-                        WebSocketModules),
-                    boss_service_sup:start_services(ServicesSupPid, MappingServices);
-                _Any ->
-                    _Any
-            end;
+            WebSocketModules = boss_files:websocket_list(AppName),
+            MappingServices  = boss_files:websocket_mapping(BaseURL,
+                                                            atom_to_list(AppName),
+                                                            WebSocketModules),
+            boss_service_sup:start_services(ServicesSupPid, MappingServices);
         true ->
             ok
     end.
 
-
 execution_mode(App) ->
     case boss_env:is_developing_app(App) of
-	true  -> development;
-	false -> production
+        true  -> development;
+        false -> production
     end.

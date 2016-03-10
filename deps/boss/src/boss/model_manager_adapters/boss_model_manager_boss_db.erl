@@ -1,10 +1,14 @@
-%%
-%% $Id: $
-%%
-%% Module:  boss_model -- description
-%% Created: 01-MAY-2012 16:32
-%% Author:  tmr
-%%
+%%-------------------------------------------------------------------
+%% @author 
+%%     ChicagoBoss Team and contributors, see AUTHORS file in root directory
+%% @end
+%% @copyright 
+%%     This file is part of ChicagoBoss project. 
+%%     See AUTHORS file in root directory
+%%     for license information, see LICENSE file in root directory
+%% @end
+%% @doc 
+%%-------------------------------------------------------------------
 
 -module(boss_model_manager_boss_db).
 -behaviour(boss_model_manager_adapter).
@@ -24,9 +28,9 @@ start() ->
                     {ok, Val} -> [{OptName, Val}|Acc];
                     _ -> Acc
                 end
-        end, [], [db_port, db_host, db_username, db_password, db_database, 
-            db_replication_set, db_read_mode, db_write_mode, 
-            db_write_host, db_write_host_port, db_read_capacity, 
+        end, [], [db_port, db_host, db_username, db_password, db_database, db_ssl, db_configure,
+            db_replication_set, db_read_mode, db_write_mode,
+            db_write_host, db_write_host_port, db_read_capacity,
             db_write_capacity, db_model_read_capacity, db_model_write_capacity]),
 
     DBAdapter = boss_env:get_env(db_adapter, mock),

@@ -1,3 +1,15 @@
+%%-------------------------------------------------------------------
+%% @author 
+%%     ChicagoBoss Team and contributors, see AUTHORS file in root directory
+%% @end
+%% @copyright 
+%%     This file is part of ChicagoBoss project. 
+%%     See AUTHORS file in root directory
+%%     for license information, see LICENSE file in root directory
+%% @end
+%% @doc 
+%%-------------------------------------------------------------------
+
 -module(boss_router_controller).
 
 -behaviour(gen_server).
@@ -16,9 +28,9 @@
 -record(state, {
         application,
         controllers = [],
-        routes_table_id		::atom() | ets:tid(),
+        routes_table_id        ::atom() | ets:tid(),
         reverse_routes_table_id ::atom() | ets:tid(),
-        handlers_table_id	::atom() | ets:tid()
+        handlers_table_id    ::atom() | ets:tid()
     }).
 
 -spec code_change(_,_,_) -> {'ok',_}.
@@ -92,7 +104,6 @@ handle_info(_Info, State) ->
 
 load(State) ->
     RoutesFile = boss_files:routes_file(State#state.application),
-    error_logger:info_msg("Loading routes from ~p ....", [RoutesFile]),
     case file:consult(RoutesFile) of
         {ok, OrderedRoutes} -> 
             lists:foldl(fun
@@ -100,7 +111,7 @@ load(State) ->
                         TheApplication = proplists:get_value(application, Proplist, State#state.application),
                         TheController = proplists:get_value(controller, Proplist),
                         TheAction = proplists:get_value(action, Proplist),
-						CleanParams = clean_params(Proplist),
+                        CleanParams = clean_params(Proplist),
                         case UrlOrStatusCode of
                             Url when is_list(Url) ->
                                 {ok, MP} = re:compile("^"++Url++"$"),
@@ -135,7 +146,7 @@ load(State) ->
                         Number+1
                 end, 1, OrderedRoutes);
         Error -> 
-            error_logger:error_msg("Missing or invalid boss.routes file in ~p~n~p~n", [RoutesFile, Error])
+            lager:error("Missing or invalid boss.routes file in ~p; Error reason: ~p", [RoutesFile, Error])
     end.
 
 handle(StatusCode, State) ->
@@ -168,7 +179,6 @@ route(Url, State) ->
                     not_found
             end;
         _Rte = #boss_route{ application = App, controller = C, action = A, params = P } -> 
-            lager:info("Boss Route ~p ~p ~p ~p", [App, C, A, P]),
             ControllerModule = list_to_atom(boss_files:web_controller(App, C, State#state.controllers)),
             {Tokens, []}     = boss_controller_lib:convert_params_to_tokens(P, ControllerModule, list_to_atom(A)),
             {ok, {App, C, A, Tokens}}
@@ -226,7 +236,7 @@ get_match(Url, [Route|T]) ->
         {controller, Route#boss_route.controller},
         {action, Route#boss_route.action} | Route#boss_route.params
     ],
-	MP = Route#boss_route.pattern,
+    MP = Route#boss_route.pattern,
     {IndexedParams, Vars} = index_and_extract_params(Params),
     case re:run(Url, MP, [{capture, Vars, list}]) of
         {match, Matches} ->

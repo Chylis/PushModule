@@ -1,0 +1,5 @@
+priv/init:
+- started boss_mq
+
+priv/static
+- added 'app' (bootstrap resources etc)
