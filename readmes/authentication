@@ -1,0 +1,14 @@
+How it works:
+
+1) Controllers that require authentication add a 'before_' action, that executes auth_lib:require_login/1
+2) auth_lib:require_login/1 fetches the admin-user by checking for the presence of cookies.
+2.1) If the admin-user exists and has a valid session id, the admin-user is injected into the request and the request is forwarded to the original controller.
+
+2.2) Else if the admin-user doesn't exist or doesn't have a valid session, he/she is redirect to the login page (GET '/admin/login')
+2.3) When username and password is submitted (POST to '/admin/login'), an admin is fetched by username and password is validated.
+2.4) If authentication is successful, the user is redirected to the 'referer URL' (fetched from HTTP header)
+
+
+
+
+Admin = admin:new(id, "maggan", auth_lib:hash_for("maggan", "maggan")), Admin:save().

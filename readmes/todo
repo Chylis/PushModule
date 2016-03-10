@@ -41,7 +41,7 @@ Frontend:
 Specification, user stories, etc:
 X Send push to all
 X View sent messages and status
-X Log in
+√ Log in
 X Log out
 X View users / registered devices/tokens
 X Schedule push for a future date
@@ -60,8 +60,9 @@ X Send push to users at certain locations
 
 Web Client:
 
-√ Bootstrap
-X Login
+√ Login
+X Present admin name in nav bar
+X Welcome page
 
 new_message:
 √ Create UI interface for creating push
@@ -74,11 +75,28 @@ X Disable 'send' button if no input is entered
 
 
 MISC:
-√ Create script from root (push_module) that loads ALL dependencies and runs all tests
-√ Create EUnit test suite
-√ Create Functional test suite for testing web controllers
-X Change format {atom, {{}, {}}}, to {atom, [{},{}]} 
-X implement user_service:all_users/0
+Refactor:
+X Create config (.hlr) file with global definitions, such as 
+    - admin and auth_lib (cookies, 'session_id', 'admin_id'),
+    - auth_controller:populate_session/2: define session keys
+    - define redirect URLS
+X Create session_handler.erl that handles session key/values (currently in auth_controller)
+X Update "UML" diagram
+X Check session settings in boss.config (timeout etc)
+X change export_all to only export required methods
+X Bootstrap login page (say welcome etc)
+X What is the path in mochi:cookies?
+
+Tests
+X Fix tests that failed after login
+X Eunit Test admin, auth_lib, session_lib,
+X Functional Test admincontroller, lost_controller
+
+X Create lost_controller and lost.html and router unknown routes there (/priv/app_routes)
+X request_utils:params_from_request returns [] instead of undefined?
+X request_utils:params_from_request([ListOfPArams], Req), should return tuple of tuple of values for each param (undefined if no param)
 X cb_admin 
 
+X Change format {atom, {{}, {}}}, to {atom, [{},{}]} 
+X How localize web client?
 ############################################################

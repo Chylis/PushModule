@@ -1,20 +1,22 @@
 %This controller module is a parameterized module, as indicated by the parameter list ([Req]) in the -module directive. 
 %This means that every function will have access to the Req variable, which has a lot of useful information about the current request.
--module(push_module_push_controller, [Req]).
+-module(push_module_push_controller, [Req, _SessionId]).
 -compile(export_all).
 
-%Each action (i.e. 'new_message') will have its own URL of the form /<controller name>/<action name>. 
-%If the URL contains additional slash-separated tokens beyond the action name, these will be passed as a list to
-%the controller action in the second argument.
 
-%Controller actions can return several values. The simplest is {output, Value}, and it returns raw HTML. 
-%We can also use {json, Values} to return JSON: {json, [{greeting, "Hello, world!"}]}.
+% Before executing an action, Chicago Boss checks to see if the controller has an before_ function. 
+% If so, it passes the action name to the before_ function and checks the return value. 
+% If Boss gets a return value of {ok, Credentials}, it proceeds to execute the action, and it passes Credentials as the third argument to the action. 
+% If Boss instead gets {redirect, Location}, it redirects the user without executing the action at all. 
+% Note that if an action only takes two arguments, the before_ step is skipped altogether.
+before_(_) ->
+  auth_lib:require_login(Req).
 
 
 % Gets the new_message page
-new_message('GET', []) ->
+new_message('GET', [], Admin) ->
   ok;
-new_message('POST', []) ->
+new_message('POST', [], Admin) ->
   Title = request_utils:param_from_request("title", Req),
   Body = request_utils:param_from_request("body", Req),
   io:format("received ~p ~p~n", [Title, Body]),

@@ -1,0 +1,18 @@
+{% if error %}
+  <font color="red">{{ error }}</font>
+{% endif %}
+
+  <form method="post">
+  Name:<br />
+  <input name="name" /><br /><br />
+
+  Password:<br />
+  <input name="password" type="password" />
+  <br/><br/>
+    <input type="submit" value="Log in" />
+
+    <!-- hidden field for redirecting the user; this is useful in cases where we want to redirect the user depending on how they arrived at the log-in page. -->
+    <input type="hidden" name="redirect" value="{{ redirect | default_if_none:"/push/new_message" }}" />
+
+    </form>
+

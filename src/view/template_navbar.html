@@ -7,19 +7,41 @@
     - block body
 -->
 
+
 {% block head %}
 
 <nav class = "navbar navbar-default navbar-static-top" role = "navigation">
-<div class = "navbar-header">
-  <a class = "navbar-brand" href = "#">Push notifications</a>
-</div>
-<div>
-  <ul class = "nav navbar-nav">
-    <li class = "active"> <a href = "#">Compose
-        <span class="glyphicon glyphicon-comment"></span>
-      </a>
-    </li>
-</div>
+
+<div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+
+        <div class = "navbar-header">
+          <a class = "navbar-brand" href = "#">
+            {% if _session.admin_name %}
+            {{ _session.admin_name }}
+            {% else %} 
+            Unauthorized User 
+            {% endif %}
+          </a>
+        </div>
+
+        <ul class = "nav navbar-nav">
+          <li class = "active"> 
+          <a href = "#">Compose
+            <span class="glyphicon glyphicon-comment"></span>
+          </a>
+          </li>
+        </ul>
+
+        {% if _session.admin_name %}
+        <div class="nav navbar-nav navbar-right">
+          <a href="/auth/logout" class="navbar-brand"><strong>Logout</strong></a>
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
 </nav>
 
 {% endblock %}
