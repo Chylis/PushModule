@@ -77,4 +77,5 @@ send('GET', []) ->
   To = "k6a0XS4-lSY:APA91bEO3D8H3mhYsv51VCs-JQtzCkac-Le7BAP_CtC4huC3nBn05OhZDTo71GFYO8FRQY3hj2V6m_I0Vq43Vjyal-GTPeaDQjY74R5wF84UBgBqAGEK16cA1IQSfcDI1hO3Z2aE1VP4",
   Title = "GCM",
   Body = "Hello from Erlang!",
-  gcm_api:send_message(ServerToken, [To], Title, Body).
+  gcm_api:send_message(ServerToken, [To], Title, Body),
+  {redirect, [{action, "list"}]}.

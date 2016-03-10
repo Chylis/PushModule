@@ -1,5 +1,7 @@
 priv/init:
 - started boss_mq
+- started boss_news
+- started inets and ssl
 
 priv/static
 - added 'app' (bootstrap resources etc)
