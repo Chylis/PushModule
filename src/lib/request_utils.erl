@@ -6,10 +6,10 @@
 %%%
 
 % Receives a String param, and a Simple Bridge request object.
-% Returns the received param from the request body, or undefined.
+% Returns the received param from the request body, or in a form body,  or undefined.
 param_from_request(Param, Req) ->
   case json_body_from_request(Req) of
-    undefined ->   undefined;
+    undefined ->   form_param_from_request(Param, Req);
     PropList  ->   proplists:get_value(Param, PropList)
   end.
 
@@ -27,3 +27,11 @@ json_body_from_request(Req) ->
   catch
     _:_   -> undefined
   end.
+
+
+form_param_from_request(Param, Req) ->
+  case Req:post_param(Param) of
+    "undefined" -> undefined;
+    Value -> Value
+  end.
+

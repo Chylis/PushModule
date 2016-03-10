@@ -5,36 +5,27 @@
 {% block body%}
 
 <div class = "well">
-    <div class = "container-fluid">
+  <div class = "container-fluid">
 
-      <div class = "row">
+    <div class = "row">
+      <div class = "col-md-12">
+        <form role = "form" method="post" name="notification">
 
-        <div class = "col-md-12">
-          <form role = "form">
-            <div class = "form-group">
-              <label for = "name">Title</label>
-              <input type = "text" class = "form-control" placeholder = "Notification title">
-            </div>
+          <div class = "form-group">
+            <label for = "name">Title</label>
+            <input type = "text" class = "form-control" placeholder = "Notification title" name = "title">
+          </div>
 
-            <div class = "form-group">
-              <label for = "name">Body</label>
-              <textarea class = "form-control" rows = "4" placeholder = "Notification body"></textarea>
-            </div>
-          </form>
-        </div>
+          <div class = "form-group">
+            <label for = "name">Body</label>
+            <textarea class = "form-control" rows = "4" placeholder = "Notification body" name = "body"></textarea>
+          </div>
 
-      </div>
+          <button type = "submit" class = "btn btn-primary btn-lg"> Send now</button>
 
-      <div class = "row">
-
-        <div class = "col-md-2">
-          <button type = "button" class = "btn btn-primary btn-lg"> Send now</button>
-        </div>
-
-        <div class = "col-md-6">
-          <button type = "button" class = "btn btn-default btn-lg"> Save </button>
-        </div>
+        </form>
       </div>
     </div>
-</div>
-{% endblock %}
+  </div>
+  </div>
+  {% endblock %}

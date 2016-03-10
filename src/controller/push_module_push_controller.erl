@@ -13,7 +13,13 @@
 
 % Gets the new_message page
 new_message('GET', []) ->
+  ok;
+new_message('POST', []) ->
+  Title = request_utils:param_from_request("title", Req),
+  Body = request_utils:param_from_request("body", Req),
+  io:format("received ~p ~p~n", [Title, Body]),
   ok.
+
 
 
 %%%
@@ -47,15 +53,14 @@ list('GET', []) ->
 create('GET', []) ->
    ok;
 create('POST', []) ->
-  Token = Req:post_param("token"),
+  Token = request_utils:param_from_request("token", Req),
   case device_service:persist_gcm_token(Token) of
     {ok, _SavedDevice} -> {redirect, [{action, "list"}]};
     {error, ErrorsList} -> {ok, [{errors, ErrorsList}]} 
   end.
 
 delete('POST', []) ->
-  Token = Req:post_param("token_id"),
-  Token2 = request_utils:param_from_request("token_id", Req),
+  Token = request_utils:param_from_request("token_id", Req),
   device_service:delete_device_with_gcm_token(Token),
   {redirect, [{action, "list"}]}.
 
