@@ -1,5 +1,6 @@
 -module(auth_lib).
--compile(export_all).
+-export([hash_for/2, hash_password/2, require_login/1, login_cookies/2, logout_cookies/0]).
+-include("include/defines.hrl").
 
 hash_for(Name, Password) ->
   MD5 = erlang:md5(Name),
@@ -17,15 +18,27 @@ hash_password(Password, Salt) ->
 require_login(Req) ->
   RedirectAction = {redirect, "/auth/login"},
 
-  case Req:cookie("admin_id") of
+  case Req:cookie(?COOKIE_ADMIN_ID) of
     undefined -> RedirectAction;
     Id ->
       case boss_db:find(Id) of
         undefined -> RedirectAction;
         Admin ->
-          case Admin:session_identifier() =:= Req:cookie("session_id") of
+          case Admin:session_identifier() =:= Req:cookie(?COOKIE_SESSION_ID) of
             false -> RedirectAction;
             true -> {ok, Admin}
           end
       end
-  end.
+ end.
+
+login_cookies(AdminId, SessionId) ->
+  [ 
+    mochiweb_cookies:cookie(?COOKIE_ADMIN_ID, AdminId, [{path, "/"}]),
+    mochiweb_cookies:cookie(?COOKIE_SESSION_ID, SessionId, [{path, "/"}]) 
+  ].
+
+logout_cookies() ->
+  [ 
+    mochiweb_cookies:cookie(?COOKIE_ADMIN_ID, "", [{path, "/"}]),
+    mochiweb_cookies:cookie(?COOKIE_SESSION_ID, "", [{path, "/"}]) 
+  ].

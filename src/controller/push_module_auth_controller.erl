@@ -1,5 +1,5 @@
 -module(push_module_auth_controller, [Req, SessionId]).
--compile(export_all).
+-export([login/2, logout/2]).
 
 -define(DEFAULT_REDIRECT, "/push/new_message").
 -define(FIRST_PAGE, "/auth/login").
@@ -17,7 +17,7 @@ login('POST', []) ->
     [Admin] ->
       case Admin:check_password(Password) of
         true ->
-          populate_session(SessionId, Admin),
+          session_handler:populate_session(SessionId, Admin),
           {redirect, proplists:get_value("redirect", Req:post_params(), ?DEFAULT_REDIRECT), Admin:login_cookies()};
         false ->
           {ok, [{error, "Bad name/password combination"}]}
@@ -28,15 +28,5 @@ login('POST', []) ->
 
 
 logout('GET', []) ->
-  delete_session(SessionId),
-  {redirect, ?FIRST_PAGE,
-    [ mochiweb_cookies:cookie("admin_id", "", [{path, "/"}]),
-      mochiweb_cookies:cookie("session_id", "", [{path, "/"}]) ]}.
-
-
-
-populate_session(SessionId, Admin) ->
-  boss_session:set_session_data(SessionId, admin_name, Admin:name()).
-
-delete_session(SessionId) ->
-  boss_session:delete_session(SessionId).
+  session_handler:delete_session(SessionId),
+  {redirect, ?FIRST_PAGE, auth_lib:logout_cookies()}.

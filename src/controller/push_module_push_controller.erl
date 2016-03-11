@@ -1,7 +1,7 @@
 %This controller module is a parameterized module, as indicated by the parameter list ([Req]) in the -module directive. 
 %This means that every function will have access to the Req variable, which has a lot of useful information about the current request.
 -module(push_module_push_controller, [Req, _SessionId]).
--compile(export_all).
+-export([before_/1, new_message/3]).
 
 
 % Before executing an action, Chicago Boss checks to see if the controller has an before_ function. 

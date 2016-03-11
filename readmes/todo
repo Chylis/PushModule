@@ -76,14 +76,7 @@ X Disable 'send' button if no input is entered
 
 MISC:
 Refactor:
-X Create config (.hlr) file with global definitions, such as 
-    - admin and auth_lib (cookies, 'session_id', 'admin_id'),
-    - auth_controller:populate_session/2: define session keys
-    - define redirect URLS
-X Create session_handler.erl that handles session key/values (currently in auth_controller)
-X Update "UML" diagram
 X Check session settings in boss.config (timeout etc)
-X change export_all to only export required methods
 X Bootstrap login page (say welcome etc)
 X What is the path in mochi:cookies?
 
