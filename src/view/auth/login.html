@@ -1,18 +1,54 @@
-{% if error %}
-  <font color="red">{{ error }}</font>
-{% endif %}
+{% extends "template_base.html" %}
 
-  <form method="post">
-  Name:<br />
-  <input name="name" /><br /><br />
+{% block title %} Welcome {% endblock %}
+{% block head %}
 
-  Password:<br />
-  <input name="password" type="password" />
-  <br/><br/>
-    <input type="submit" value="Log in" />
+<div class = "jumbotron">
+  <div class = "container-fluid">
 
-    <!-- hidden field for redirecting the user; this is useful in cases where we want to redirect the user depending on how they arrived at the log-in page. -->
-    <input type="hidden" name="redirect" value="{{ redirect | default_if_none:"/push/new_message" }}" />
+    <div class = "row">
 
-    </form>
+      <div class = "col-md-3">
+        <img class="img-responsive" src="/static/app/images/sign-in.png" />
+      </div>
 
+      <div class = "col-md-9">
+        <div class = "row">
+          <div class = "col-md-12">
+            <h1>Welcome</h1>
+            <p>Sign in to proceed.</p>
+          </div>
+        </div>
+
+        <div class = "row">
+          <div class = "col-md-12">
+            <form role = "form" method="post">
+              {% if error %}
+              <font color="red">{{ error }}</font>
+              {% endif %}
+
+              <div class = "form-group">
+                <label for = "name">Username</label>
+                <input type = "text" class = "form-control" placeholder = "Username" name = "name">
+              </div>
+
+              <div class = "form-group">
+                <label for = "name">Password</label>
+                <input type = "password" class = "form-control" placeholder = "Password" name = "password">
+              </div>
+
+              <button type = "submit" class = "btn btn-primary btn-lg">Log in</button>
+
+              <!-- hidden field for redirecting the user; this is useful in cases where we want to redirect the user depending on how they arrived at the log-in page. -->
+              <input type="hidden" name="redirect" value="{{ redirect | default_if_none:"/push/new_message" }}" />
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

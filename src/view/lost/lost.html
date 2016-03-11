@@ -1,0 +1,32 @@
+{% extends "template_base.html" %}
+
+{% block title %} 404 - Not found {% endblock %}
+
+{% block head %} 
+<div class = "jumbotron">
+  <div class = "container-fluid">
+
+    <div class = "row">
+
+      <div class = "col-md-3">
+        <img class=img-responsive" src="/static/app/images/404-beast.png" />
+      </div>
+
+      <div class = "col-md-9">
+        <div class = "row">
+          <div class = "col-md-12">
+            <h1>Lost?</h1>
+          </div>
+        </div>
+
+        <div class = "row">
+          <div class = "col-md-12">
+            <p>The requested URL could not be found</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
