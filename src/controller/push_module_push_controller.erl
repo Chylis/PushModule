@@ -2,7 +2,7 @@
 %This means that every function will have access to the Req variable, which has a lot of useful information about the current request.
 -module(push_module_push_controller, [Req, _SessionId]).
 -export([before_/1, new_message/3]).
-
+-include("include/defines.hrl").
 
 % Before executing an action, Chicago Boss checks to see if the controller has an before_ function. 
 % If so, it passes the action name to the before_ function and checks the return value. 
@@ -17,18 +17,53 @@ before_(_) ->
 new_message('GET', [], Admin) ->
   ok;
 new_message('POST', [], Admin) ->
-  Title = request_utils:param_from_request("title", Req),
-  Body = request_utils:param_from_request("body", Req),
+  {Title, Body}  = request_utils:params(["title", "body"], Req),
   io:format("received ~p ~p~n", [Title, Body]),
-  ok.
 
+  case validate_input_list([Title, Body]) of 
+    true ->
+      case gcm_api:send_message(?GCM_API_KEY, device_service:tokens(), Title, Body) of
+        {ok, {token_statuses, TokenStatusList}, {retry_after, RetryAfter}} ->
+          device_service:handle_token_status_list(TokenStatusList),
+          {ok, [{success, "Notification sent!"}]};
 
+        {error, {retry_after, RetryAfter}} ->
+          io:format("Error sending to gcm. Retry after ~p~n", [RetryAfter]),
+          {ok, [{error, "Failed sending message. Try again after: " ++ RetryAfter}]};
+
+        {error, Reason} ->
+          {ok, [{error, Reason}]}
+      end;
+
+    false ->
+      {ok, [{error, "Invalid input"}]}
+  end.
 
 %%%
-%%% To be added
+%%% Internal
 %%%
-% -  send POST
-% -   
+
+
+% Validates each input
+% @param InputList: a list of input
+% @return: true if input is OK, else false
+validate_input_list(InputList) ->
+  validate_input_list(InputList, []).
+
+validate_input_list([], Acc) ->
+  lists:member(false, Acc) == false;
+validate_input_list([Input|T], Acc) ->
+  Result = validate_input(Input),
+  validate_input_list(T, [Result|Acc]).
+
+% Returns true if Input is a non-empty string
+validate_input(Input) when is_list(Input) ->
+  TrimmedString = re:replace(Input, "(\\s+)", "", [global,{return,list}]),
+  length(TrimmedString) > 0;
+validate_input(_) ->
+  false.
+
+
 
 
 
@@ -55,14 +90,14 @@ list('GET', []) ->
 create('GET', []) ->
    ok;
 create('POST', []) ->
-  Token = request_utils:param_from_request("token", Req),
+  Token = request_utils:param("token", Req),
   case device_service:persist_gcm_token(Token) of
     {ok, _SavedDevice} -> {redirect, [{action, "list"}]};
     {error, ErrorsList} -> {ok, [{errors, ErrorsList}]} 
   end.
 
 delete('POST', []) ->
-  Token = request_utils:param_from_request("token_id", Req),
+  Token = request_utils:param("token_id", Req),
   device_service:delete_device_with_gcm_token(Token),
   {redirect, [{action, "list"}]}.
 
@@ -77,12 +112,3 @@ live('GET', []) ->
 pull('GET', [LastTimestamp]) ->
  {ok, Timestamp, Devices} = boss_mq:pull("new-devices", list_to_integer(LastTimestamp)), % Fetch all new messages since LastTimestamp
  {json, [{timestamp, Timestamp}, {devices, Devices}]}.
-
-
-send('GET', []) ->
-  ServerToken = "AIzaSyCA817K5DPHsfC9NAezrOfKm07KpeiYduw", 
-  To = "k6a0XS4-lSY:APA91bEO3D8H3mhYsv51VCs-JQtzCkac-Le7BAP_CtC4huC3nBn05OhZDTo71GFYO8FRQY3hj2V6m_I0Vq43Vjyal-GTPeaDQjY74R5wF84UBgBqAGEK16cA1IQSfcDI1hO3Z2aE1VP4",
-  Title = "GCM",
-  Body = "Hello from Erlang!",
-  gcm_api:send_message(ServerToken, [To], Title, Body),
-  {redirect, [{action, "list"}]}.

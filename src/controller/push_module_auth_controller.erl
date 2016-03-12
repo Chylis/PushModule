@@ -10,9 +10,7 @@ login('GET', []) ->
 
 % Verifies name and password and redirects the user if authentication was successful
 login('POST', []) ->
-  Name = request_utils:param_from_request("name", Req),
-  Password = request_utils:param_from_request("password", Req),
-
+  {Name, Password} = request_utils:params(["name", "password"], Req),
   case boss_db:find(admin, [{name, Name}], [{limit,1}]) of
     [Admin] ->
       case Admin:check_password(Password) of

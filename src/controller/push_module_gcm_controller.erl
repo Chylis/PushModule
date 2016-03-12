@@ -7,8 +7,8 @@
 
 % curl -v http://104.155.38.181:8001/gcm/registerToken -d {\"token\":\"mag\"}
 registerToken('POST', []) -> 
-  case request_utils:param_from_request("token", Req) of
-    undefined -> {400, ["Missing token"], []};
+  case request_utils:param("token", Req) of
+    [] -> {400, ["Missing token"], []};
     Token     ->
       case device_service:persist_gcm_token(Token) of
         {ok, _}                     -> {200, [], []};
@@ -20,8 +20,8 @@ registerToken(_, _) ->
 
 
 unregisterToken('POST', []) ->
-  case request_utils:param_from_request("token", Req) of
-    undefined -> {400, ["Missing token"], []};
+  case request_utils:param("token", Req) of
+    [] -> {400, ["Missing token"], []};
     Token     -> 
       device_service:delete_device_with_gcm_token(Token),
       {200, [], []}

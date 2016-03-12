@@ -3,40 +3,31 @@
 Backend:
 
 Mobile Client API:
-/gcm/:
-√ Expose registerGCMToken endpoint
-√ Expose unregisterGCMToken endpoint
-√ Create test suite for endpoint 
-√ Create TokenModel with validation 
-√ Store DeviceModel in database
-√ Create DeviceModel tests (unable to run due to bug in CB)
 
+/gcm/:
 
 ############################################################
 
 
 Web Client API:
-/push/
-X Expose REST API containing 'send' endpoint 
-Send all:
-X 0) Validate input and populate template with errors in case of error
-X 1) fetch all device tokens
-X 2) send to gcm through gcm_api
+
+/push/new_message POST:
+√ 0) Validate input and populate template with errors in case of error
+√ 1) fetch all device tokens
+√ 2) send to gcm through gcm_api
 X 3) Act upon response (i.e, store message id, replace old tokens, retry according to retry_after or exponential backoff algorithm)
 
-
 ############################################################
-
-
-GCM API Client:
-√ Create GCMApiClient that communicates with GCM
-√ Parse response payload from GCM:
-
-
-############################################################
-
 
 Frontend:
+
+Web Client:
+/push/new_message
+X Disable 'send' button if no input is entered
+X Red font color if error
+
+############################################################
+
 
 Specification, user stories, etc:
 X Send push to all
@@ -57,31 +48,12 @@ X Send push to users at certain locations
 
 ############################################################
 
-
-Web Client:
-√ Login
-√ Present admin name in nav bar
-
-new_message:
-√ Create UI interface for creating push
-√ Make UI interface talk to backend
-X Disable 'send' button if no input is entered
-
-
-
-############################################################
-
-
 MISC:
 Todo:
-X Apiary/Swagger
-X request_utils:params_from_request returns [] instead of undefined?
-X request_utils:params_from_request([ListOfPArams], Req), should return tuple of tuple of values for each param (undefined if no param)
 X cb_admin 
 
-X Change format {atom, {{}, {}}}, to {atom, [{},{}]} 
-
 Refactor:
+X Change format {atom, {{}, {}}}, to {atom, [{},{}]} 
 
 Tests
 X Fix tests that failed after login
@@ -90,7 +62,6 @@ X Functional Test admincontroller, lost_controller
 
 X How localize web client?
 ############################################################
-
 
 - Mobile client framework:
   - clientId,
