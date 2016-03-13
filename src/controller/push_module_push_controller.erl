@@ -18,18 +18,16 @@ new_message('GET', [], Admin) ->
   ok;
 new_message('POST', [], Admin) ->
   {Title, Body}  = request_utils:params(["title", "body"], Req),
-  io:format("received ~p ~p~n", [Title, Body]),
 
   case validate_input_list([Title, Body]) of 
     true ->
       case gcm_api:send_message(?GCM_API_KEY, device_service:tokens(), Title, Body) of
         {ok, {token_statuses, TokenStatusList}, {retry_after, RetryAfter}} ->
           device_service:handle_token_status_list(TokenStatusList),
-          {ok, [{success, "Notification sent!"}]};
+          {ok, [{success, "Notification sent"}]};
 
         {error, {retry_after, RetryAfter}} ->
-          io:format("Error sending to gcm. Retry after ~p~n", [RetryAfter]),
-          {ok, [{error, "Failed sending message. Try again after: " ++ RetryAfter}]};
+          {ok, [{error, io_lib:format("Failed sending message. Try again after ~p", [RetryAfter])}]};
 
         {error, Reason} ->
           {ok, [{error, Reason}]}

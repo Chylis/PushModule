@@ -1,17 +1,39 @@
 ############################################################
 
+V1 Specification, user stories, etc:
+√ Log in
+√ Log out
+X Send push to all
+X View users / registered devices/tokens
+X View sent messages and status
+X Client framework for server communication
+
+
+Future specifications:
+X Schedule push for a future date
+X View scheduled messages
+X Group users into different groups
+X Send push to specific user groups
+X Geolocation
+X Send push to users at certain locations
+
+
+############################################################
+
 Backend:
 
 Mobile Client API:
 
-/gcm/:
-
-############################################################
+√ /gcm/registerToken:
+√ /gcm/unRegisterToken:
 
 
 Web Client API:
 
-/push/new_message POST:
+√ /auth/login
+√ /auth/logout
+
+X /push/new_message POST:
 √ 0) Validate input and populate template with errors in case of error
 √ 1) fetch all device tokens
 √ 2) send to gcm through gcm_api
@@ -28,27 +50,8 @@ X Red font color if error
 
 ############################################################
 
-
-Specification, user stories, etc:
-X Send push to all
-X View sent messages and status
-√ Log in
-√ Log out
-X View users / registered devices/tokens
-X Schedule push for a future date
-X View scheduled messages
-
-
-Future specifications:
-X Group users into different groups
-X Send push to specific user groups
-X Geolocation
-X Send push to users at certain locations
-
-
-############################################################
-
 MISC:
+
 Todo:
 X cb_admin 
 
@@ -61,6 +64,7 @@ X Eunit Test admin, auth_lib, session_lib,
 X Functional Test admincontroller, lost_controller
 
 X How localize web client?
+
 ############################################################
 
 - Mobile client framework:
