@@ -11,8 +11,24 @@
 <html>
   <head>
     <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
-    <!-- Bootstrap -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src = "https://code.jquery.com/jquery.js"></script>
+
+    <!-- Bower js -->
+    <script type="text/javascript" src="/static/app/lib/bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="/static/app/lib/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+    <!-- Bower css -->
+    <link rel="stylesheet" href="/static/app/lib/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+
+    <!-- Bootstrap css -->
     <link href = "/static/app/lib/bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+
+    <!-- Bootstrap js -->
+    <script src = "/static/app/lib/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- App css -->
     <link href = "/static/app/css/app.css" rel = "stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -27,11 +43,6 @@
   </head>
 
   <body>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src = "https://code.jquery.com/jquery.js"></script>
-
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src = "/static/app/lib/bootstrap/js/bootstrap.min.js"></script>
 
     {% block body %} {% endblock %}
 

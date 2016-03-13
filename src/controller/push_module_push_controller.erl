@@ -17,22 +17,21 @@ before_(_) ->
 new_message('GET', [], Admin) ->
   ok;
 new_message('POST', [], Admin) ->
-  {Title, Body}  = request_utils:params(["title", "body"], Req),
+  {Title, Body, ScheduledFor}  = request_utils:params(["title", "body", "date"], Req),
+  [Year, ZeroBasedMonth, Day, Hour, Minute] = lists:flatten(lists:map(fun(Str) -> 
+          {Int, _Rest} = string:to_integer(Str), 
+          Int 
+      end, 
+      string:tokens(ScheduledFor, ","))),
+  Month = ZeroBasedMonth + 1,
+  io:format("Received ~p ~p ~p ~p ~p ~p ~p~n", [Title, Body, Year, Month, Day, Hour, Minute]),
+  ScheduledDateTime = {{Year, Month, Day}, {Hour, Minute, 0}},
 
   case validate_input_list([Title, Body]) of 
     true ->
-      case gcm_api:send_message(?GCM_API_KEY, device_service:tokens(), Title, Body) of
-        {ok, {token_statuses, TokenStatusList}, {retry_after, RetryAfter}} ->
-          device_service:handle_token_status_list(TokenStatusList),
-          {ok, [{success, "Notification sent"}]};
-
-        {error, {retry_after, RetryAfter}} ->
-          {ok, [{error, io_lib:format("Failed sending message. Try again after ~p", [RetryAfter])}]};
-
-        {error, Reason} ->
-          {ok, [{error, Reason}]}
-      end;
-
+      % Todo: notificaiton_service. Create new notification template with title, body, scheduledFor, e.g. notification_service:create_notification_template(Title, Body, ScheduledFor)
+      create_notification_template(Title, Body, ScheduledDateTime),
+      {ok, [{success, "Notification created"}]};
     false ->
       {ok, [{error, "Invalid input"}]}
   end.
@@ -40,6 +39,12 @@ new_message('POST', [], Admin) ->
 %%%
 %%% Internal
 %%%
+
+
+%Todo: Refactor into notification_service
+create_notification_template(Title, Body, ScheduledFor) ->
+  Notification = boss_record:new(notification_template, [{title, Title}, {body, Body}, {scheduled_for, ScheduledFor}]),
+  Notification:save().
 
 
 % Validates each input
@@ -90,7 +95,7 @@ create('GET', []) ->
 create('POST', []) ->
   Token = request_utils:param("token", Req),
   case device_service:persist_gcm_token(Token) of
-    {ok, _SavedDevice} -> {redirect, [{action, "list"}]};
+    ok -> {redirect, [{action, "list"}]};
     {error, ErrorsList} -> {ok, [{errors, ErrorsList}]} 
   end.
 

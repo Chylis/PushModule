@@ -1,9 +1,13 @@
--module(device, [Id, GcmToken, CreatedAt, UpdatedAt]).
+-module(device, [
+    Id, 
+    GcmToken,       % Current token, string
+    PreviousTokens, % List of previous gcm tokens,
+    IsRemoved,      % If the deivce/token is marked as removed or not, bool
+    CreatedAt,      % Date 
+    UpdatedAt       % Date
+  ]).
 -compile(export_all).
-
-%%%============================================================================
-%%% API
-%%%============================================================================
+-has({notification, many}).
 
 %%%============================================================================
 %%% Validation 
@@ -11,7 +15,7 @@
 
 validation_tests() ->
   [
-   { fun() -> is_list(GcmToken) andalso length(GcmToken) > 0 end,  {gcm_token, "Required"} }
+   { fun() -> is_list(GcmToken) andalso length(GcmToken) > 0 end,  {gcm_token, "Token Required"} }
   ].
 
 %%%============================================================================
@@ -20,11 +24,8 @@ validation_tests() ->
 
 before_create() ->
   Now = calendar:now_to_universal_time(erlang:now()),
-  ModifiedDevice= set([{created_at, Now}, {updated_at, Now}]),
+  ModifiedDevice = set([{is_removed, false}, {previous_tokens, []}, {created_at, Now}, {updated_at, Now}]),
   {ok, ModifiedDevice}.
-
-after_create() ->
-  boss_mq:push("new-devices", THIS).
 
 before_update() ->
   Now = calendar:now_to_universal_time(erlang:now()),

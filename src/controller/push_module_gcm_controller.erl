@@ -11,8 +11,8 @@ registerToken('POST', []) ->
     [] -> {400, ["Missing token"], []};
     Token     ->
       case device_service:persist_gcm_token(Token) of
-        {ok, _}                     -> {200, [], []};
-        {error, ErrorMessages}      -> {500, ErrorMessages, []}
+        ok                      -> {200, [], []};
+        {error, Reason}  -> {500, Reason, []}
       end
   end;
 registerToken(_, _) ->

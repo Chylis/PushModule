@@ -4,6 +4,7 @@
 
 {% block body%}
 
+
 <div class = "well">
 
   {% if success %}
@@ -20,13 +21,11 @@
 
   <div class = "container-fluid">
 
-
     <div class = "row">
       <div class = "col-md-12">
         <form role = "form" method="post">
 
           <div class = "form-group">
-
             <label for = "name">Title</label>
             <input type = "text" class = "form-control" placeholder = "Notification title" name = "title">
           </div>
@@ -36,7 +35,34 @@
             <textarea class = "form-control" rows = "4" placeholder = "Notification body" name = "body"></textarea>
           </div>
 
-          <button type = "submit" class = "btn btn-primary btn-lg"> Send now</button>
+          <div style="overflow:hidden;">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-8">
+                  <input type="hidden" id="selectedDate" name="date"/>
+                  <div id="datetimepicker"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type = "submit" class = "btn btn-primary btn-lg" id = "submitButton"> Send now</button>
+
+            <script type="text/javascript"> 
+              $(function () { 
+                  $('#datetimepicker').datetimepicker({format: "YYYY M D h m", inline: true, sideBySide: true, minDate: new Date()});
+                  $('#submitButton').on('click', function(e)  {
+                    var selectedDate = $('#datetimepicker').data("DateTimePicker").date();
+                    var year = selectedDate.year();
+                    var month = selectedDate.month();
+                    var day = selectedDate.date();
+                    var hour = selectedDate.hour();
+                    var minute = selectedDate.minute();
+                    var dateString = [year,month,day,hour,minute];
+                    $("#selectedDate").val(dateString);
+                    });
+                  }); 
+            </script>
 
         </form>
       </div>

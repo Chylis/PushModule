@@ -14,6 +14,8 @@
 % - {ok, {token_statuses, [token, status]}, {retry_after, (undefined | Value)}}, e.g. [{"12", ok} {"34", remove}, {"56", retry}, {"78", {new_token, "87"}] 
 % - {error {retry_after, (undefined | Duration)}} 
 % - {error, Reason}
+send_message(_ApiKey, [], _MsgTitle, _MsgBody) ->
+  {error, "No receivers"};
 send_message(ApiKey, ReceiverTokens, MsgTitle, MsgBody) ->
   Request = create_request(ApiKey, ReceiverTokens, MsgTitle, MsgBody),
   case http_utils:send_http_request(post, Request, [], []) of
