@@ -40,9 +40,6 @@ X Misc)
 √ Persist a notification_template when administrator creates a message in the web UI (and update appropriate fields, such as ScheduledFor, Title, Body, Etc) 
 
 X Create 'view notifications' template (ability to filter on all, unsent, and sent)
-X Add sent_at to 'notification'
-X Replace sent_at with 'sent' boolean 'notification_template'
-X Create and move logic into notification_service
 X Move notification_scheduler into src, and invoke it from init?
 X Write tests!!!
 
@@ -110,4 +107,8 @@ Notification scheduling:
 2.2) For each found notification, update 'sentAt' and send them.
 2.3) Upon receiving response, persist a 'notification' object, tied to the 'notification_template', and to the receiving 'device'. 
 The 'notification' object also contains status, (TODO: add send timestamp?).
+
+When parsing the response: 
+- mark invalid tokens as removed
+- update old tokens if we receive new
 

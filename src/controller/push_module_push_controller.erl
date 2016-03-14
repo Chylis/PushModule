@@ -29,8 +29,8 @@ new_message('POST', [], Admin) ->
 
   case validate_input_list([Title, Body]) of 
     true ->
-      % Todo: notificaiton_service. Create new notification template with title, body, scheduledFor, e.g. notification_service:create_notification_template(Title, Body, ScheduledFor)
-      create_notification_template(Title, Body, ScheduledDateTime),
+      % Todo: handle error creating notification_template
+      notification_service:create_notification_template(Title, Body, ScheduledDateTime),
       {ok, [{success, "Notification created"}]};
     false ->
       {ok, [{error, "Invalid input"}]}
@@ -39,13 +39,6 @@ new_message('POST', [], Admin) ->
 %%%
 %%% Internal
 %%%
-
-
-%Todo: Refactor into notification_service
-create_notification_template(Title, Body, ScheduledFor) ->
-  Notification = boss_record:new(notification_template, [{title, Title}, {body, Body}, {scheduled_for, ScheduledFor}]),
-  Notification:save().
-
 
 % Validates each input
 % @param InputList: a list of input

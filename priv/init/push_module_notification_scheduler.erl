@@ -13,13 +13,8 @@ stop(TimerIds) ->
 
 check_expired_and_unsent_notifications() ->
   io:format("~s: Checking for expired notifications~n", [format_utc_timestamp()]),
-
-  %Todo: Refactor notification_service:expiredNotificaitons()
-  ExpiredNotifications = boss_db:find(notification_template, 
-    [{scheduled_for, 'lt', calendar:local_time()}, {sent_at, 'equals', undefined}], 
-    [{order_by, scheduled_for}, {descending, false}]),
+  ExpiredNotifications = notification_service:expired_notification_templates(),
   lists:foreach(fun(NotificationTemplate) -> send_scheduled_notification(NotificationTemplate) end, ExpiredNotifications).
-
 
 send_scheduled_notification(NotificationTemplate) ->
   UpdatedNotification = NotificationTemplate:set(sent_at, calendar:local_time()),
