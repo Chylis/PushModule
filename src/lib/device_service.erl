@@ -53,42 +53,26 @@ process_token_status_list(TokenStatusList, NotificationTemplate) ->
 process_token({Token, {{ok, MessageId}, {new_token, NewToken}}}, NotificationTemplate) ->
   update_gcm_token(Token, NewToken),
   Device = device_with_gcm_token(NewToken),
-  create_sent_notification(MessageId, Device, NotificationTemplate);
+  notification_service:create_sent_notification(MessageId, Device, NotificationTemplate);
 process_token({Token, {ok, MessageId}}, NotificationTemplate) ->
   Device = device_with_gcm_token(Token),
-  create_sent_notification(MessageId, Device, NotificationTemplate);
+  notification_service:create_sent_notification(MessageId, Device, NotificationTemplate);
 process_token({Token, remove}, NotificationTemplate) ->
   Device = device_with_gcm_token(Token),
-  create_sent_notification(remove, Device, NotificationTemplate),
+  notification_service:create_sent_notification(remove, Device, NotificationTemplate),
   delete_device_with_gcm_token(Token);
 process_token({Token, retry}, NotificationTemplate) ->
   Device = device_with_gcm_token(Token),
-  create_sent_notification(retry, Device, NotificationTemplate);
+  notification_service:create_sent_notification(retry, Device, NotificationTemplate);
 process_token({Token, error}, NotificationTemplate) ->
   Device = device_with_gcm_token(Token),
-  create_sent_notification(error, Device, NotificationTemplate).
+  notification_service:create_sent_notification(error, Device, NotificationTemplate).
 
 
 
 %%%
 %%% Internal
 %%%
-
-
-%TODO: Refactor into notification_service?
-create_sent_notification(remove, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Message not sent - Status 'Invalid token'"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
-  Notification:save();
-create_sent_notification(retry, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Message not sent -  Status 'Retry'"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
-  Notification:save();
-create_sent_notification(error, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Message not sent - Status 'Uknown Error'"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
-  Notification:save();
-create_sent_notification(GcmMessageId, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Message sent"}, {gcm_message_id, GcmMessageId}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
-  Notification:save().
-
 
 % Returns ok | {error, ReasonString}
 save_device(Device) ->

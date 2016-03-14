@@ -4,10 +4,13 @@
     Body,         % Body of notification
     ScheduledFor, % Schedule date
     SentAt,       % Date notification was sent
+    Status,       % Status string
     CreatedAt,    % Creation date
+    AdminId,      % Id of admin that created notification
     UpdatedAt     % Update date
   ]).
 -compile(export_all).
+-belongs_to(admin).
 -has({notification, many}).
 
 %%%============================================================================
@@ -31,7 +34,7 @@ validation_tests() ->
 
 before_create() ->
   Now = calendar:now_to_universal_time(erlang:now()),
-  Modified = set([{sent_messages, []}, {created_at, Now}, {updated_at, Now}]),
+  Modified = set([{sent_messages, []}, {created_at, Now}, {updated_at, Now}, {status, "Pending"}]),
   {ok, Modified}.
 
 before_update() ->

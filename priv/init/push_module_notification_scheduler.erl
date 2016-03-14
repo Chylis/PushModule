@@ -17,21 +17,22 @@ check_expired_and_unsent_notifications() ->
   lists:foreach(fun(NotificationTemplate) -> send_scheduled_notification(NotificationTemplate) end, ExpiredNotifications).
 
 send_scheduled_notification(NotificationTemplate) ->
-  UpdatedNotification = NotificationTemplate:set(sent_at, calendar:local_time()),
-  UpdatedNotification:save(),
+  Updated1 = notification_service:update_notification_template(NotificationTemplate, sent_at, calendar:local_time()),
 
   case gcm_api:send_message(?GCM_API_KEY, device_service:tokens(), NotificationTemplate:title(), NotificationTemplate:body()) of
     {ok, {token_statuses, TokenStatusList}, {retry_after, RetryAfter}} ->
       device_service:process_token_status_list(TokenStatusList, NotificationTemplate),
+      notification_service:update_notification_template(Updated1, status, "Sent"),
       io:format("Successfully sent notification: ~p, For more info, check the individual notifications~n", [NotificationTemplate]);
 
     {error, {retry_after, RetryAfter}} ->
       io:format("Failed to send notification: ~p, Try again after: ~p~n", [NotificationTemplate, RetryAfter]),
-      {ok, [{error, io_lib:format("Failed sending message. Try again after ~p", [RetryAfter])}]};
+      notification_service:update_notification_template(Updated1, status, "Failed: Retry");
 
     {error, Reason} ->
       io:format("Error sending notification: ~p, Reason: ~p~n", [NotificationTemplate, Reason]),
-      {ok, [{error, Reason}]}
+      StatusString = io_lib:format("Error: ~p", Reason),
+      notification_service:update_notification_template(Updated1, status, StatusString)
   end.
 
 

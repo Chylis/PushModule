@@ -1,6 +1,10 @@
 -module(admin, [Id, Name, PasswordHash]).
 -compile(export_all).
-% API
+-has({notification_template, many}).
+
+%%%
+%%% API
+%%%
 
 % When a log-in is successful, we’ll put that session identifier along with the admin Id into a cookie, 
 % and if we ever receive that same cookie back, we’ll know it’s the same person who logged in. 

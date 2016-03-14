@@ -1,0 +1,54 @@
+{% extends "template_navbar.html" %}
+
+<!-- Awesomeness http://bootstrap-table.wenzhixin.net.cn/documentation/#column-options -->
+{% block title %} All messages {% endblock %}
+
+{% block body%}
+
+<div class = "well">
+
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+
+        <table id="table" class = "table table-hover" 
+          data-toggle="table"
+          data-search="true"
+          data-show-columns="true"
+          data-show-toggle="true"
+          data-pagination="true"
+          data-page-size="50"
+          data=>
+          <thead>
+            <tr>
+              <th data-sortable="true">Status</th>
+              <th data-sortable="true">GCM Id</th>
+              <th data-sortable="true">Receiver</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for notification in template.notification %}
+            {% if notification.delivery_status == "Message sent" %}
+            <tr class = "success">
+            {% else %}
+            <tr class = "danger">
+            {% endif %}
+              <td> {{ notification.delivery_status}}</td>
+              <td> {{ notification.gcm_message_id}}</td>
+              <td> {{ notification.device.gcm_token}}</td>
+            </tr>
+            {% empty %}
+            No sent notifications
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+

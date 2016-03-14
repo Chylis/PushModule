@@ -3,10 +3,11 @@
 V1 Specification, user stories, etc:
 √ Log in
 √ Log out
-X Schedule push to all
-X View scheduled messages
-X View sent messages and status
+√ Schedule push to all
+√ View messages and status
+X View details of a message and remove/cancel a message
 X View users / registered devices/tokens
+X View administrators
 X Client framework for server communication
 
 
@@ -39,9 +40,13 @@ X Misc)
 √ Allow admin to select a scheduled for date in /push/new_message UI
 √ Persist a notification_template when administrator creates a message in the web UI (and update appropriate fields, such as ScheduledFor, Title, Body, Etc) 
 
-X Create 'view notifications' template (ability to filter on all, unsent, and sent)
+√ Create 'view notifications' template (ability to filter on all, unsent, and sent)
+√ Click on a notification template to see sent messages
+X 'sent_messages' should contain info about notification_template and a back button
 X Move notification_scheduler into src, and invoke it from init?
+X Live update of sent notifications in 'push/view_messages' when a message is sent
 X Write tests!!!
+
 
 
 ############################################################
@@ -49,9 +54,12 @@ X Write tests!!!
 Frontend:
 
 Web Client:
+
+navbar:
+X set currently selected item to active
+
 /push/new_message
-X Disable 'send' button if no input is entered
-X Red font color if error
+X Disable 'create' button if no input is entered
 X Pre populate fields with previous input
 
 ############################################################

@@ -1,7 +1,7 @@
 %This controller module is a parameterized module, as indicated by the parameter list ([Req]) in the -module directive. 
 %This means that every function will have access to the Req variable, which has a lot of useful information about the current request.
 -module(push_module_push_controller, [Req, _SessionId]).
--export([before_/1, new_message/3]).
+-export([before_/1, new_message/3, view_messages/3, view_message/3]).
 -include("include/defines.hrl").
 
 % Before executing an action, Chicago Boss checks to see if the controller has an before_ function. 
@@ -11,10 +11,13 @@
 % Note that if an action only takes two arguments, the before_ step is skipped altogether.
 before_(_) ->
   auth_lib:require_login(Req).
+before_(_,_,_) ->
+  auth_lib:require_login(Req).
+
 
 
 % Gets the new_message page
-new_message('GET', [], Admin) ->
+new_message('GET', [], _Admin) ->
   ok;
 new_message('POST', [], Admin) ->
   {Title, Body, ScheduledFor}  = request_utils:params(["title", "body", "date"], Req),
@@ -30,11 +33,20 @@ new_message('POST', [], Admin) ->
   case validate_input_list([Title, Body]) of 
     true ->
       % Todo: handle error creating notification_template
-      notification_service:create_notification_template(Title, Body, ScheduledDateTime),
+      notification_service:create_notification_template(Title, Body, ScheduledDateTime, Admin:id()),
       {ok, [{success, "Notification created"}]};
     false ->
       {ok, [{error, "Invalid input"}]}
   end.
+
+
+view_messages('GET', [], _Admin) ->
+  Notifications = notification_service:all_notification_templates(),
+  {ok, [{notifications, Notifications}]}.
+
+view_message('GET', [NotificationTemplateId], _Admin) ->
+  Notification = notification_service:notification_template_with_id(NotificationTemplateId),
+  {ok, [{template, Notification}]}.
 
 %%%
 %%% Internal
