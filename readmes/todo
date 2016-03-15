@@ -12,6 +12,7 @@ X Client framework for server communication
 
 
 Future specifications:
+X Enable client framework to send additional user information, such as name, gender, email, phone number, address, etc
 X Group users into different groups
 X View user groups / filter users on groups/attributes
 X Send push to specific user groups (A notification_template has receivers? (i.e. list of DeviceId))
@@ -34,6 +35,7 @@ Web Client API:
 √ /auth/logout
 
 X Misc) 
+X refactor common components into reusable div classes
 X template_base, create block_meta_scripts in HEAD where all scripts go
 X all views, see if I can refactor reouting to {% url action %} format, 
 - <a href="{% url action="edit" record_id=record.id %}
@@ -60,6 +62,8 @@ Web Client:
 
 /push/new_message
 X Disable 'create' button if no input is entered
+
+X Improve code reusablity etc
 
 ############################################################
 

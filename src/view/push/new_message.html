@@ -1,9 +1,26 @@
 {% extends "template_navbar.html" %}
 
+<!-- 
+  New/Edit message template
+  Possible extension points are:
+    - block pageheader 
+-->
+
 {% block title %} New message {% endblock %}
 
 {% block body%}
 
+{% block pageheader %} 
+
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+        <h3> Create new message </h3>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
 
 <div class = "well">
 

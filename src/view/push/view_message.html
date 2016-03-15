@@ -31,6 +31,13 @@
 <!-- Hidden input field containing the notification_template id -->
 <input type="hidden" id="notificationId" value={{ template.id }}/>
 
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+        <h3> Message details </h3>
+      </div>
+    </div>
+  </div>
 
 <!-- Present the notification template -->
 <div class = "well">
@@ -109,8 +116,13 @@
 
 
 
-
-
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+        <h3> Dispatched messages </h3>
+      </div>
+    </div>
+  </div>
 
 <!-- Present the notifications belonging to the template -->
 <div class = "well">
@@ -130,7 +142,7 @@
           <thead>
             <tr>
               <th data-sortable="true">Status</th>
-              <th data-sortable="true">GCM Id</th>
+              <th data-sortable="true">GCM Message Id</th>
               <th data-sortable="true">Receiver</th>
             </tr>
           </thead>
