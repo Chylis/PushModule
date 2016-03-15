@@ -17,6 +17,12 @@
 %%% API
 %%%============================================================================
 
+formatted_created_at() ->
+  date_utils:format_datetime(CreatedAt).
+
+formatted_scheduled_for() ->
+  date_utils:format_datetime(ScheduledFor).
+
 %%%============================================================================
 %%% Validation 
 %%%============================================================================
@@ -33,11 +39,11 @@ validation_tests() ->
 %%%============================================================================
 
 before_create() ->
-  Now = calendar:now_to_universal_time(erlang:now()),
+  Now = date_utils:local_datetime(),
   Modified = set([{sent_messages, []}, {created_at, Now}, {updated_at, Now}, {status, "Pending"}]),
   {ok, Modified}.
 
 before_update() ->
-  Now = calendar:now_to_universal_time(erlang:now()),
+  Now = date_utils:local_datetime(),
   Modified = set([{updated_at, Now}]),
   {ok, Modified}.

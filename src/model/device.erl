@@ -23,11 +23,11 @@ validation_tests() ->
 %%%============================================================================
 
 before_create() ->
-  Now = calendar:now_to_universal_time(erlang:now()),
+  Now = date_utils:local_datetime(),
   ModifiedDevice = set([{is_removed, false}, {previous_tokens, []}, {created_at, Now}, {updated_at, Now}]),
   {ok, ModifiedDevice}.
 
 before_update() ->
-  Now = calendar:now_to_universal_time(erlang:now()),
+  Now = date_utils:local_datetime(),
   ModifiedDevice= set([{updated_at, Now}]),
   {ok, ModifiedDevice}.

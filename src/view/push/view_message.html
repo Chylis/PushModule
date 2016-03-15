@@ -1,10 +1,58 @@
 {% extends "template_navbar.html" %}
 
 <!-- Awesomeness http://bootstrap-table.wenzhixin.net.cn/documentation/#column-options -->
-{% block title %} All messages {% endblock %}
+{% block title %} Notification Details{% endblock %}
 
 {% block body%}
 
+
+<!-- Present the notification template -->
+<div class = "well">
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+
+        <table class = "table table-hover" 
+          data-toggle="table"
+          data-show-toggle="true">
+
+          <thead>
+            <tr>
+              <th data-width="13%">Created</th>
+              <th data-width="20%">Creator</th>
+              <th data-width="13%">Title</th>
+              <th data-width="25%">Body</th>
+              <th data-width="13%">Send at</th>
+              <th >Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% if template.status == "Sent" %}
+              <tr class = "success">
+              {% elif template.status == "Pending" %}
+              <tr class = "warning">
+              {% else %}
+              <tr class = "danger">
+              {% endif %}
+                <td> {{ template.formatted_created_at }} </td>
+                <td> {{ template.admin.name}}</td>
+                <td> {{ template.title}}</td>
+                <td> {{ template.body}}</td>
+                <td> {{ template.formatted_scheduled_for}}</td>
+                <td> {{ template.status }} </td>
+              </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Present the notifications belonging to the template -->
 <div class = "well">
 
   <div class = "container-fluid">
@@ -17,7 +65,7 @@
           data-show-columns="true"
           data-show-toggle="true"
           data-pagination="true"
-          data-page-size="50"
+          data-page-size="250"
           data=>
           <thead>
             <tr>
@@ -29,7 +77,7 @@
 
           <tbody>
             {% for notification in template.notification %}
-            {% if notification.delivery_status == "Message sent" %}
+            {% if notification.delivery_status == "Sent" %}
             <tr class = "success">
             {% else %}
             <tr class = "danger">
@@ -38,8 +86,6 @@
               <td> {{ notification.gcm_message_id}}</td>
               <td> {{ notification.device.gcm_token}}</td>
             </tr>
-            {% empty %}
-            No sent notifications
             {% endfor %}
           </tbody>
 

@@ -13,7 +13,9 @@ X Client framework for server communication
 
 Future specifications:
 X Group users into different groups
-X Send push to specific user groups
+X View user groups / filter users on groups/attributes
+X Send push to specific user groups (A notification_template has receivers? (i.e. list of DeviceId))
+X View receivers of a notification_template (add a section in the /view/message template)
 X Geolocation
 X Send push to users at certain locations
 
@@ -39,12 +41,15 @@ X When invalid input, return already entered data in order to pre-populate field
 X Misc) 
 √ Allow admin to select a scheduled for date in /push/new_message UI
 √ Persist a notification_template when administrator creates a message in the web UI (and update appropriate fields, such as ScheduledFor, Title, Body, Etc) 
-
 √ Create 'view notifications' template (ability to filter on all, unsent, and sent)
 √ Click on a notification template to see sent messages
-X 'sent_messages' should contain info about notification_template and a back button, increase paging by 500?
-X Move notification_scheduler into src, and invoke it from init?
+
+X Remove/Cancel a scheduled notification_template
+X Update lucid chart
+X Update apiary
+
 X Live update of sent notifications in 'push/view_messages' when a message is sent
+X Move notification_scheduler into src, and invoke it from init?
 X Write tests!!!
 
 
@@ -102,11 +107,10 @@ X How localize web client?
 #
 Notification scheduling:
 - A device has many notifications (that have been received)
-- A notification_template has many notifications (that have been sent) 
+- A notification_template has many notifications (that have been sent), and a creater (AdminId)
 - A notification has one device (the receiver) and one template (the contents, etc)
 
 
-- USE calendar:local_time() format! (DateTime, {{Year, Month, Day}, {Hour, Minute, Second}}, e.g. {{2016,3,14},{12,26,36}}
 1) Admin creates a new notification template through the web UI, containing title, body, scheduledFor
 2) A bg-timer checks for notification_templates that have not been sent and whos scheuledFor has passed.
 2.2) For each found notification, update 'sentAt' and send them.
@@ -117,3 +121,6 @@ When parsing the response:
 - mark invalid tokens as removed
 - update old tokens if we receive new
 
+
+FUTURE:
+- A notification_template has receivers? (i.e. list of DeviceId)

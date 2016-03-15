@@ -32,7 +32,7 @@ update_notification_template(NotificationTemplate, Key, Value) ->
 expired_notification_templates() ->
   ExpiredNotifications = boss_db:find(
     notification_template, 
-    [{scheduled_for, 'lt', calendar:local_time()}, {sent_at, 'equals', undefined}], 
+    [{scheduled_for, 'lt', date_utils:local_datetime()}, {sent_at, 'equals', undefined}], 
     [{order_by, scheduled_for}, {descending, false}]),
   ExpiredNotifications.
 
@@ -48,14 +48,14 @@ all_notification_templates() ->
 
 % Persists a 'notification' model representing a sent notification.
 create_sent_notification(remove, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Message not sent - 'Invalid token'"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
+  Notification = boss_record:new(notification, [{delivery_status, "Invalid token"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
   Notification:save();
 create_sent_notification(retry, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Message not sent - 'Retry'"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
+  Notification = boss_record:new(notification, [{delivery_status, "Retry"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
   Notification:save();
 create_sent_notification(error, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Message not sent - 'Uknown Error'"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
+  Notification = boss_record:new(notification, [{delivery_status, "Uknown Error"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
   Notification:save();
 create_sent_notification(GcmMessageId, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Message sent"}, {gcm_message_id, GcmMessageId}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
+  Notification = boss_record:new(notification, [{delivery_status, "Sent"}, {gcm_message_id, GcmMessageId}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
   Notification:save().

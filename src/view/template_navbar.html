@@ -19,7 +19,7 @@
         <div class = "navbar-header">
           <a class = "navbar-brand" href = "#">
             {% if _session.admin_name %}
-            {{ _session.admin_name }}
+            {{ _session.admin_name|upper }}
             {% else %} 
             Unauthorized User 
             {% endif %}
@@ -28,14 +28,14 @@
 
         <ul class = "nav navbar-nav">
           <li>
-          <a href = "/push/new_message">Create notification
-            <span class="glyphicon glyphicon-comment"></span>
+          <a href = "/push/new_message">Create
+            <span class="glyphicon glyphicon-edit"></span>
           </a>
           </li>
 
           <li>
-          <a href = "/push/view_messages">View notifications
-            <span class="glyphicon glyphicon-comment"></span>
+          <a href = "/push/view_messages">View
+            <span class="glyphicon glyphicon-list-alt"></span>
           </a>
           </li>
         </ul>

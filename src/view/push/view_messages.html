@@ -5,8 +5,16 @@
 
 {% block body%}
 
-<div class = "well">
+ <script type="text/javascript"> 
+   $(function () { 
+       $('#table').on('click-row.bs.table', function(event, htmlElement)  {
+         var notificationId = htmlElement[0].trim();
+         window.location="/push/view_message/"+notificationId;
+         });
+       });
+</script>
 
+<div class = "well">
   <div class = "container-fluid">
     <div class = "row">
       <div class = "col-md-12">
@@ -22,32 +30,32 @@
           <thead>
             <tr>
               <th data-sortable="false" data-visible="false">Id</th>
-              <th data-sortable="true">Created</th>
+              <th data-sortable="true" data-width="13%">Created</th>
               <th data-sortable="true" data-width="20%">Creator</th>
-              <th data-sortable="true" data-width="15%">Title</th>
+              <th data-sortable="true" data-width="13%">Title</th>
               <th data-sortable="false" data-width="25%">Body</th>
-              <th data-sortable="true">Send at</th>
+              <th data-sortable="true" data-width="13%">Send at</th>
               <th data-sortable="true">Status</th>
             </tr>
           </thead>
 
           <tbody>
             {% for template in notifications %}
-            {% if template.sent_at %}
-            <tr class = "success">
-            {% else %}
-            <tr class = "active">
-            {% endif %}
-              <td> {{ template.id}}</td>
-              <td> {{ template.created_at }}</td>
-              <td> {{ template.admin.name}}</td>
-              <td> {{ template.title}}</td>
-              <td> {{ template.body}}</td>
-              <td> {{ template.scheduled_for}}</td>
-              <td> {{ template.status }} </td>
-            </tr>
-            {% empty %}
-            No created notifications
+              {% if template.status == "Sent" %}
+              <tr class = "success">
+              {% elif template.status == "Pending" %}
+              <tr class = "warning">
+              {% else %}
+              <tr class = "danger">
+              {% endif %}
+                <td> {{ template.id}}</td>
+                <td> {{ template.formatted_created_at }} </td>
+                <td> {{ template.admin.name}}</td>
+                <td> {{ template.title}}</td>
+                <td> {{ template.body}}</td>
+                <td> {{ template.formatted_scheduled_for}}</td>
+                <td> {{ template.status }} </td>
+              </tr>
             {% endfor %}
           </tbody>
 
@@ -55,15 +63,6 @@
 
       </div>
     </div>
-
-    <script type="text/javascript"> 
-      $(function () { 
-          $('#table').on('click-row.bs.table', function(event, htmlElement)  {
-            var notificationId = htmlElement[0].trim();
-            window.location="/push/view_message/"+notificationId;
-            });
-          });
-        </script>
   </div>
 </div>
 {% endblock %}
