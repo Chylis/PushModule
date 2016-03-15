@@ -17,6 +17,7 @@
           push_module_view_push_view_message_html,
           push_module_view_push_new_message_html,
           push_module_view_push_live_html,push_module_view_push_list_html,
+          push_module_view_push_edit_message_html,
           push_module_view_push_create_html,push_module_view_lost_lost_html,
           push_module_view_auth_login_html]},
      {registered,[]},
@@ -45,6 +46,7 @@
                push_module_view_push_new_message_html,
                push_module_view_push_live_html,
                push_module_view_push_list_html,
+               push_module_view_push_edit_message_html,
                push_module_view_push_create_html,
                push_module_view_lost_lost_html,
                push_module_view_auth_login_html]}]}]}.

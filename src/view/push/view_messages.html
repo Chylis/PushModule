@@ -41,9 +41,9 @@
 
           <tbody>
             {% for template in notifications %}
-              {% if template.status == "Sent" %}
+              {% if template.is_sent %}
               <tr class = "success">
-              {% elif template.status == "Pending" %}
+              {% elif template.is_pending %}
               <tr class = "warning">
               {% else %}
               <tr class = "danger">

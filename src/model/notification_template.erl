@@ -4,7 +4,7 @@
     Body,         % Body of notification
     ScheduledFor, % Schedule date
     SentAt,       % Date notification was sent
-    Status,       % Status string
+    Status,       % Status string, 'Sent' | 'Pending' | 'Failed: Retry' | 'Error: <Reason>'
     CreatedAt,    % Creation date
     AdminId,      % Id of admin that created notification
     UpdatedAt     % Update date
@@ -22,6 +22,12 @@ formatted_created_at() ->
 
 formatted_scheduled_for() ->
   date_utils:format_datetime(ScheduledFor).
+
+is_sent() ->
+  Status == "Sent".
+
+is_pending() ->
+  Status == "Pending".
 
 %%%============================================================================
 %%% Validation 

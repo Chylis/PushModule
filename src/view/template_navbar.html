@@ -18,6 +18,7 @@
 
         <div class = "navbar-header">
           <a class = "navbar-brand" href = "#">
+            <span class="glyphicon glyphicon-user"></span>
             {% if _session.admin_name %}
             {{ _session.admin_name|upper }}
             {% else %} 
@@ -42,7 +43,9 @@
 
         {% if _session.admin_name %}
         <div class="nav navbar-nav navbar-right">
-          <a href="/auth/logout" class="navbar-brand"><strong>Logout</strong></a>
+          <a href="/auth/logout" class="navbar-brand"><strong>Log out </strong>
+            <span class="glyphicon glyphicon-log-out"></span>
+          </a>
         </div>
         {% endif %}
 
