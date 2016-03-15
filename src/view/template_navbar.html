@@ -10,7 +10,7 @@
 
 {% block head %}
 
-<nav class = "navbar navbar-default navbar-static-top" role = "navigation">
+<nav id="navbar" class = "navbar navbar-default navbar-static-top" role = "navigation">
 
 <div class = "container-fluid">
     <div class = "row">
@@ -45,6 +45,15 @@
           <a href="/auth/logout" class="navbar-brand"><strong>Logout</strong></a>
         </div>
         {% endif %}
+
+        <script>
+        <!-- Mark currently selected list item as active -->
+          $(document).ready(function() {
+            $.each($('#navbar').find('li'), function() {
+              $(this).toggleClass('active', window.location.pathname.indexOf($(this).find('a').attr('href')) > -1);
+            }); 
+          });
+        </script>
 
       </div>
     </div>
