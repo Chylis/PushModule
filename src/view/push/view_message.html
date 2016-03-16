@@ -3,7 +3,7 @@
 <!-- Awesomeness http://bootstrap-table.wenzhixin.net.cn/documentation/#column-options -->
 {% block title %} Notification Details{% endblock %}
 
-{% block body%}
+{% block meta_scripts %} 
 
 <script type="text/javascript"> 
 
@@ -27,6 +27,10 @@
   }
 
 </script>
+
+{% endblock %}
+
+{% block body%}
 
 <!-- Hidden input field containing the notification_template id -->
 <input type="hidden" id="notificationId" value={{ template.id }}/>

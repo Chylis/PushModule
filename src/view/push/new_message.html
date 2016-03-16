@@ -3,10 +3,57 @@
 <!-- 
   New/Edit message template
   Possible extension points are:
-    - block pageheader 
+  - block pageheader 
 -->
 
 {% block title %} New message {% endblock %}
+
+{% block meta_scripts %} 
+
+            <script type="text/javascript"> 
+
+              $(function () { 
+                  $('#datetimepicker').datetimepicker({
+                  format: "YYYY M D H m", inline: true, 
+                  sideBySide: true, minDate: new Date(), 
+                  calendarWeeks: true, showTodayButton: true});
+
+                  {% if template %}
+                  // Convert date components to a moment.js date object
+                  var templateScheduledDateComponents = "{{ template.scheduled_for }}";
+                  var dateComponents = templateScheduledDateComponents.replace(/[{ }]/g, '').trim().split(",");
+                  var year = dateComponents[0];
+                  var month = dateComponents[1] - 1; // Remove offset
+                  var day = dateComponents[2];
+                  var hour = dateComponents[3];
+                  var minute = dateComponents[4];
+
+                  // Set datepicker selected date
+                  $('#datetimepicker').data("DateTimePicker").date(new Date(year, month, day, hour, minute));
+
+                  {% endif %}
+                  
+                  populateTextfieldWithDatepickerData();
+
+                  function populateTextfieldWithDatepickerData() {
+                    //Populate hidden text field with selected date components
+                    var selectedDate = $('#datetimepicker').data("DateTimePicker").date();
+                    var year = selectedDate.year();
+                    var month = selectedDate.month();
+                    var day = selectedDate.date();
+                    var hour = selectedDate.hour();
+                    var minute = selectedDate.minute();
+                    var dateString = [year,month,day,hour,minute];
+                    $("#selectedDate").val(dateString);
+                  }
+
+                  $('#submitButton').on('click', function(e)  {
+                      populateTextfieldWithDatepickerData();
+                    });
+                  }); 
+            </script>
+
+{% endblock %}
 
 {% block body%}
 
@@ -63,53 +110,10 @@
           </div>
 
           <button type = "submit" class = "btn btn-primary btn-lg" id = "submitButton"> Save</button>
-
-            <script type="text/javascript"> 
-
-              $(function () { 
-                  $('#datetimepicker').datetimepicker({
-                  format: "YYYY M D H m", inline: true, 
-                  sideBySide: true, minDate: new Date(), 
-                  calendarWeeks: true, showTodayButton: true});
-
-                  {% if template %}
-                  // Convert date components to a moment.js date object
-                  var templateScheduledDateComponents = "{{ template.scheduled_for }}";
-                  var dateComponents = templateScheduledDateComponents.replace(/[{ }]/g, '').trim().split(",");
-                  var year = dateComponents[0];
-                  var month = dateComponents[1] - 1; // Remove offset
-                  var day = dateComponents[2];
-                  var hour = dateComponents[3];
-                  var minute = dateComponents[4];
-
-                  // Set datepicker selected date
-                  $('#datetimepicker').data("DateTimePicker").date(new Date(year, month, day, hour, minute));
-
-                  {% endif %}
-                  
-                  populateTextfieldWithDatepickerData();
-
-                  function populateTextfieldWithDatepickerData() {
-                    //Populate hidden text field with selected date components
-                    var selectedDate = $('#datetimepicker').data("DateTimePicker").date();
-                    var year = selectedDate.year();
-                    var month = selectedDate.month();
-                    var day = selectedDate.date();
-                    var hour = selectedDate.hour();
-                    var minute = selectedDate.minute();
-                    var dateString = [year,month,day,hour,minute];
-                    $("#selectedDate").val(dateString);
-                  }
-
-                  $('#submitButton').on('click', function(e)  {
-                      populateTextfieldWithDatepickerData();
-                    });
-                  }); 
-            </script>
-
         </form>
       </div>
     </div>
+    
   </div>
   </div>
 {% endblock %}

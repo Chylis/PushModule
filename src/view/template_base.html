@@ -4,6 +4,7 @@
   Base template that all other templates should extend.
   Possible extension points are:
     - block title
+    - block meta_scripts
     - block head
     - block body
 -->
@@ -41,6 +42,9 @@
       <script src = "https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
       <![endif]-->
     <title>{% block title %} {% endblock %}</title>
+
+    {% block meta_scripts %} {% endblock %}
+
     {% block head %} {% endblock %}
   </head>
 
