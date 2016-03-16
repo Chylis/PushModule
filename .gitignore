@@ -1,3 +1,4 @@
 *.swp
 *.beam
 log/
+*.DS_Store
