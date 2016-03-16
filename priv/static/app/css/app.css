@@ -1,5 +1,6 @@
 /* navbar */
-.navbar-default {
-  background-color: #F8F8F8;
-  border-color: #E7E7E7;
-}
+.navbar-default { background-color: #F8F8F8; border-color: #E7E7E7 }
+
+/* Headers */
+h1, h2, h3, h4 { font-family: helvetica neue, helvetica, "microsoft sans serif", arial, sans-serif; }
+h1, h2, h3, h4 { color: #575757; font-weight: bold; margin:0pt 0pt 0pt 0.25em; padding:0pt 0pt 10px; text-align:left; }

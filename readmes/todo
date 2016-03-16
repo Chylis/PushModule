@@ -36,7 +36,8 @@ Web Client API:
 
 X Misc) 
 X refactor common components into reusable div classes
-X template_base, create block_meta_scripts in HEAD where all scripts go
+X refactor common components into reusable html template/element
+√ template_base, create block_meta_scripts in HEAD where all scripts go
 X all views, see if I can refactor reouting to {% url action %} format, 
 - <a href="{% url action="edit" record_id=record.id %}
 
