@@ -1,0 +1,121 @@
+{% extends "template_navbar.html" %}
+
+<!-- Awesomeness http://bootstrap-table.wenzhixin.net.cn/documentation/#column-options -->
+{% block title %} User Details{% endblock %}
+
+{% block body%}
+
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+        <h3> User Details </h3>
+      </div>
+    </div>
+  </div>
+
+<div class = "well">
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+
+        <table class = "table table-hover" 
+          data-toggle="table"
+          data-show-toggle="true">
+
+          <thead>
+            <tr>
+
+              <th>Created</th>
+              <th>Updated</th>
+
+              {% for property in user_properties %}
+              <th>{{property}}</th>
+              {% endfor %}
+
+            </tr>
+          </thead>
+
+          <tbody>
+              <tr>
+                <td> {{ user.formatted_created_at }}</td>
+                <td> {{ user.formatted_updated_at }}</td>
+
+                {% for property in user_properties %}
+                <td> {% value_for_user_property user=user property=property %}</td>
+                {% endfor %}
+
+              </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+        <h3> Registered devices</h3>
+      </div>
+    </div>
+  </div>
+
+<!-- Present the devices belonging to the user -->
+<div class = "well">
+
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+
+        <table id="table" class = "table table-hover" 
+          data-toggle="table"
+          data-search="true"
+          data-show-columns="true"
+          data-show-toggle="true"
+          data-pagination="true"
+          data-page-size="250"
+          data>
+
+          <thead>
+            <tr>
+              <th data-sortable="true">Created</th>
+              <th data-sortable="true">Updated</th>
+              <th data-sortable="true">Token</th>
+
+              {% for property in device_properties %}
+              <th data-sortable="true">{{property}}</th>
+              {% endfor %}
+
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for device in user.device %}
+              <tr>
+                <td> {{ device.formatted_created_at }}</td>
+                <td> {{ device.formatted_updated_at }}</td>
+                <td> {{ device.gcm_token}}</td>
+
+                {% for property in device_properties %}
+                <td> {% value_for_device_property device=device property=property %}</td>
+                {% endfor %}
+
+              </tr>
+
+            {% endfor %}
+          </tbody>
+
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -5,66 +5,23 @@ V1 Specification, user stories, etc:
 √ Log out
 √ Schedule push to all
 √ View messages and status
+√ View receivers of a notification template
 √ View details of a message and remove/cancel a message
 X View users / registered devices/tokens
+X Users -> User Details -> Shoudl be able to view received messages
 X View administrators
-X Client framework for server communication
 
+X Client framework for server communication
+  X Enable client framework to send additional user information, such as name, gender, email, phone number, address, etc (A 'user' has many devices, a 'device' has one user)
 
 Future specifications:
-X Enable client framework to send additional user information, such as name, gender, email, phone number, address, etc
 X Group users into different groups
 X View user groups / filter users on groups/attributes
 X Send push to specific user groups (A notification_template has receivers? (i.e. list of DeviceId))
-X View receivers of a notification_template (add a section in the /view/message template)
+X A notification_template has receivers? (i.e. list of DeviceId)
 X Geolocation
 X Send push to users at certain locations
 
-
-############################################################
-
-Backend:
-
-Mobile Client API:
-√ /gcm/registerToken:
-√ /gcm/unRegisterToken:
-
-
-Web Client API:
-√ /auth/login
-√ /auth/logout
-
-X Misc) 
-X refactor common components into reusable div classes
-X refactor common components into reusable html template/element
-√ template_base, create block_meta_scripts in HEAD where all scripts go
-X all views, see if I can refactor reouting to {% url action %} format, 
-- <a href="{% url action="edit" record_id=record.id %}
-
-- <form name="upload" action="{% url action="upload" model_name=type %}" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" /> &nbsp; &nbsp;
-    <input type="submit" value="Upload" />
-  </form>
-
-X Update lucid chart
-X Update apiary
-
-X Live update of sent notifications in 'push/view_messages' when a message is sent
-X Move notification_scheduler into src, and invoke it from init?
-X Write tests!!!
-
-
-
-############################################################
-
-Frontend:
-
-Web Client:
-
-/push/new_message
-X Disable 'create' button if no input is entered
-
-X Improve code reusablity etc
 
 ############################################################
 
@@ -74,6 +31,39 @@ Todo:
 X cb_admin 
 
 Refactor:
+X view_message_Details: only show receiving users? Currently it shows receiving user once for each of user.device
+X view_user: show received messages
+X Make device more static (remove additionalInfoJson)
+X refactor REST api names, e.g. new_message --> /message 'GET, POST, PUT, DELETE' etc
+X Expose update_user (PUT)
+
+X Remove unused code:
+  - device_service, user_service, etc
+X Check push_module_device_controller and user_controller, make sure you cannot add several devices with same id, etc
+
+X Update lucid chart
+X Update apiary
+
+X Live update of sent notifications in 'push/view_messages' when a message is sent
+X Move notification_scheduler into src, and invoke it from init?
+X Write tests!!!
+
+X refactor common components into reusable div classes
+X refactor common components into reusable html template/element
+√ template_base, create block_meta_scripts in end of BODY? for performance
+X all views, see if I can refactor reouting to {% url action %} format, 
+X view:Disable 'create' button if no input is entered
+
+X Improve code reusablity etc
+- <a href="{% url action="edit" record_id=record.id %}
+
+- <form name="upload" action="{% url action="upload" model_name=type %}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" /> &nbsp; &nbsp;
+    <input type="submit" value="Upload" />
+  </form>
+
+
+
 
 Tests
 X Fix tests that failed after login
@@ -84,39 +74,16 @@ X How localize web client?
 
 ############################################################
 
-- Mobile client framework:
-  - clientId,
-  - deviceString
-  - iOSVersion
-  - frameworkVersion?
-  - gcmToken
-   
-- Server user model:
-  - Id
-  - clientId
-  - deviceString
-  - frameworkVersion
-  - gcmToken
+Backend:
 
+Mobile Client API:
+
+Web Client API:
+
+X Misc) 
 
 ############################################################
 
-Notification scheduling:
-- A device has many notifications (that have been received)
-- A notification_template has many notifications (that have been sent), and a creater (AdminId)
-- A notification has one device (the receiver) and one template (the contents, etc)
+Frontend:
 
-
-1) Admin creates a new notification template through the web UI, containing title, body, scheduledFor
-2) A bg-timer checks for notification_templates that have not been sent and whos scheuledFor has passed.
-2.2) For each found notification, update 'sentAt' and send them.
-2.3) Upon receiving response, persist a 'notification' object, tied to the 'notification_template', and to the receiving 'device'. 
-The 'notification' object also contains status, (TODO: add send timestamp?).
-
-When parsing the response: 
-- mark invalid tokens as removed
-- update old tokens if we receive new
-
-
-FUTURE:
-- A notification_template has receivers? (i.e. list of DeviceId)
+Web Client:

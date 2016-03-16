@@ -1,0 +1,14 @@
+User/Device handling
+1) registerUser endpoint takes (externalUserId, additionalInfo), where externalUserId is e.g. a login, and additionalInfo is a json-object of optionals, e.g. 
+  1.1) persists a user with externalUserId if not already exists
+  X - How to handle faking and updating another user by sending in his/her userId?
+    - Return a id to client framework and only allow updating the user by that id?
+
+2) registerDevice(externalUserId, deviceId, additionalInfo), 
+  2.1) persists a device with the received info, ties it to the user
+  X - How to handle faking and registering devices for another user by sending in his/her userId?
+    - Return a id to client framework and only allow registering devices? But then how add several devices?
+
+3) registerGcmToken(deviceId, Token)
+  3.1) fetch device and set active token to Token and add previous token to 'PrevTokens'
+

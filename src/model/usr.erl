@@ -1,17 +1,12 @@
--module(device, [
-    Id,             % Database id
-    DeviceId,       % Device id, UUID
-    UsrId,          % Id of owner
-    AdditionalInfo, % Optional json object received from the client app containing dynamic data about the device, e.g. "os", "osVersion", etc
-    GcmToken,       % Current token, string
-    PreviousTokens, % List of previous gcm tokens,
+-module(usr, [
+    Id, 
+    ExternalId,     % External user id, received from the client application
+    AdditionalInfo, % Optional json object received from the client app containing dynamic data about the user, e.g. "firstName", "gender", etc
     CreatedAt,      % Date 
     UpdatedAt       % Date
   ]).
-
 -compile(export_all).
--belongs_to(usr).
--has({notification, many}).
+-has({device, many}).
 
 %%%============================================================================
 %%% API
@@ -30,6 +25,8 @@ value_for_property(Property) ->
     Plist -> proplists:get_value(Property, Plist)
   end.
 
+
+
 formatted_created_at() ->
   date_utils:format_datetime(CreatedAt).
 
@@ -42,8 +39,7 @@ formatted_updated_at() ->
 
 validation_tests() ->
   [
-   { fun() -> is_list(DeviceId) andalso length(DeviceId) > 0 end,  {device_id, "DeviceId Required"} },
-   { fun() -> is_list(UsrId) andalso length(UsrId) > 0 end,  {usr_id, "UserId Required"} }
+   { fun() -> is_list(ExternalId) andalso length(ExternalId) > 0 end,  {external_id, "A user must have an external user id"} }
   ].
 
 %%%============================================================================
@@ -52,10 +48,10 @@ validation_tests() ->
 
 before_create() ->
   Now = date_utils:local_datetime(),
-  ModifiedDevice = set([{previous_tokens, []}, {created_at, Now}, {updated_at, Now}]),
-  {ok, ModifiedDevice}.
+  Modified = set([{created_at, Now}, {updated_at, Now}]),
+  {ok, Modified}.
 
 before_update() ->
   Now = date_utils:local_datetime(),
-  ModifiedDevice= set([{updated_at, Now}]),
-  {ok, ModifiedDevice}.
+  Modified = set([{updated_at, Now}]),
+  {ok, Modified}.

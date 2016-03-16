@@ -1,0 +1,78 @@
+{% extends "template_navbar.html" %}
+
+<!-- Awesomeness http://bootstrap-table.wenzhixin.net.cn/documentation/#column-options -->
+{% block title %} Users {% endblock %}
+
+{% block meta_scripts %} 
+
+ <script type="text/javascript"> 
+   $(function () { 
+       $('#table').on('click-row.bs.table', function(event, htmlElement)  {
+         var userId  = htmlElement[0].trim();
+         window.location="/user/view_user/"+userId;
+         });
+       });
+</script>
+
+{% endblock %}
+
+{% block body%}
+
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+        <h3> Users </h3>
+      </div>
+    </div>
+  </div>
+
+<div class = "well">
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+
+        <table id="table" class = "table table-hover table-striped" 
+          data-toggle="table"
+          data-search="true"
+          data-show-columns="true"
+          data-show-toggle="true"
+          data-pagination="true"
+          data-page-size="100">
+
+          <thead>
+            <tr>
+              <th data-sortable="false" data-visible="false">Id</th>
+              <th data-sortable="true">Created</th>
+              <th data-sortable="true">Updated</th>
+
+              {% for property in properties %}
+              <th data-sortable="true">{{property}}</th>
+              {% endfor %}
+
+
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for user in users %}
+              <tr>
+                <td> {{ user.id}}</td>
+                <td> {{ user.formatted_created_at }}</td>
+                <td> {{ user.formatted_updated_at }}</td>
+
+                {% for property in properties %}
+                <td> {% value_for_user_property user=user property=property %}</td>
+                {% endfor %}
+
+              </tr>
+
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

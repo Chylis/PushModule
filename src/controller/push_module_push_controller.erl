@@ -34,9 +34,14 @@ view_messages('GET', [], _Admin) ->
   {ok, [{notifications, Notifications}]}.
 
 view_message('GET', [NotificationTemplateId], _Admin) ->
-  Notification = notification_service:notification_template_with_id(NotificationTemplateId),
-  {ok, [{template, Notification}]}.
-
+  NotificationTemplate = notification_service:notification_template_with_id(NotificationTemplateId),
+  DispatchedNotifications = NotificationTemplate:notification(),
+  Devices = lists:flatten(lists:map(fun(Notification) -> Notification:device() end, DispatchedNotifications)),
+  Users = lists:map(fun(Device) -> Device:usr() end, Devices),
+  {ok, [
+      {template, NotificationTemplate}, 
+      {user_properties, user_service:user_properties(Users)}
+    ]}.
 
 delete_message('DELETE', [NotificationTemplateId], _Admin) ->
   case notification_service:delete_notification_template_with_id(NotificationTemplateId) of
@@ -133,25 +138,6 @@ validate_input(_) ->
 %%%
 %%% Temporary / To be removed
 %%%
-
-list('GET', []) ->
-  Tokens = boss_db:find(device, []),
-  {ok, [{tokens, Tokens}]}.
-
-
-create('GET', []) ->
-   ok;
-create('POST', []) ->
-  Token = request_utils:param("token", Req),
-  case device_service:persist_gcm_token(Token) of
-    ok -> {redirect, [{action, "list"}]};
-    {error, ErrorsList} -> {ok, [{errors, ErrorsList}]} 
-  end.
-
-delete('POST', []) ->
-  Token = request_utils:param("token_id", Req),
-  device_service:delete_device_with_gcm_token(Token),
-  {redirect, [{action, "list"}]}.
 
 % Initially called by client retrieve all devices and a timestamp
 live('GET', []) ->

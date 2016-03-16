@@ -1,7 +1,7 @@
 -module(push_module_notification_scheduler).
 -export([init/0, stop/1, check_expired_and_unsent_notifications/0]).
 -include("include/defines.hrl").
--define(INTERVAL, 60000).
+-define(INTERVAL, 30000).
 
 init() ->
   {ok, TimerId} = timer:apply_interval(?INTERVAL, ?MODULE, check_expired_and_unsent_notifications, []),
@@ -12,7 +12,6 @@ stop(TimerIds) ->
 
 
 check_expired_and_unsent_notifications() ->
-  io:format("~s: Checking for expired notifications~n", [date_utils:format_utc_timestamp()]),
   ExpiredNotifications = notification_service:expired_notification_templates(),
   lists:foreach(fun(NotificationTemplate) -> send_scheduled_notification(NotificationTemplate) end, ExpiredNotifications).
 
@@ -23,14 +22,14 @@ send_scheduled_notification(NotificationTemplate) ->
     {ok, {token_statuses, TokenStatusList}, {retry_after, RetryAfter}} ->
       device_service:process_token_status_list(TokenStatusList, NotificationTemplate),
       notification_service:update_notification_template(Updated1, status, "Sent"),
-      io:format("Successfully sent notification: ~p, For more info, check the individual notifications~n", [NotificationTemplate]);
+      io:format("~nSuccessfully sent notification: ~p, For more info, check the individual notifications~n", [NotificationTemplate]);
 
     {error, {retry_after, RetryAfter}} ->
-      io:format("Failed to send notification: ~p, Try again after: ~p~n", [NotificationTemplate, RetryAfter]),
+      io:format("~nFailed to send notification: ~p, Try again after: ~p~n", [NotificationTemplate, RetryAfter]),
       notification_service:update_notification_template(Updated1, status, "Failed: Retry");
 
     {error, Reason} ->
-      io:format("Error sending notification: ~p, Reason: ~p~n", [NotificationTemplate, Reason]),
+      io:format("~nError sending notification: ~p, Reason: ~p~n", [NotificationTemplate, Reason]),
       StatusString = io_lib:format("Error: ~p", [Reason]),
       notification_service:update_notification_template(Updated1, status, StatusString)
   end.

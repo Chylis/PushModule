@@ -1,0 +1,9 @@
+Database:
+- A user has 1..* device
+- A device has 1 user (owner)
+- A device has 0..* notifications (that have been received)
+- A notification_template has 1 admin (creator)
+- A notification_template has 0..* notification (that have been sent)
+- A notification has 1 notification_template (the content)
+- A notification has 1 device (receiver)
+

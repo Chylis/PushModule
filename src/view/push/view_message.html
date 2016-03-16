@@ -55,7 +55,7 @@
     <div class = "row">
       <div class = "col-md-12">
 
-        <table class = "table table-hover" 
+        <table class = "table" 
           data-toggle="table"
           data-show-toggle="true">
 
@@ -135,7 +135,7 @@
     <div class = "row">
       <div class = "col-md-12">
 
-        <table id="table" class = "table table-hover" 
+        <table id="table" class = "table" 
           data-toggle="table"
           data-search="true"
           data-show-columns="true"
@@ -147,21 +147,31 @@
             <tr>
               <th data-sortable="true">Status</th>
               <th data-sortable="true">GCM Message Id</th>
-              <th data-sortable="true">Receiver</th>
+
+              {% for property in user_properties %}
+              <th data-sortable="true">{{property}}</th>
+              {% endfor %}
+
             </tr>
           </thead>
 
           <tbody>
             {% for notification in template.notification %}
+
             {% if notification.is_sent %}
             <tr class = "success">
             {% else %}
             <tr class = "danger">
             {% endif %}
-              <td> {{ notification.delivery_status}}</td>
-              <td> {{ notification.gcm_message_id}}</td>
-              <td> {{ notification.device.gcm_token}}</td>
-            </tr>
+
+            <td> {{ notification.delivery_status}}</td>
+            <td> {{ notification.gcm_message_id}}</td>
+
+            {% for property in user_properties %}
+            <td> {% value_for_user_property user=notification.device.usr property=property %}</td>
+            {% endfor %}
+          </tr>
+
             {% endfor %}
           </tbody>
 

@@ -1,5 +1,5 @@
 -module(request_utils).
--export([param/2, params/2]).
+-export([param/2, params/2, property_list_from_json/1]).
 
 %%%
 %%% API

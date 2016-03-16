@@ -1,0 +1,11 @@
+Notification scheduling:
+1) Admin creates a new notification template through the web UI, containing title, body, scheduledFor
+2) A bg-timer checks for notification_templates that have not been sent and whos scheuledFor has passed.
+2.2) For each found notification, update 'sentAt' and send them.
+2.3) Upon receiving response, persist a 'notification' object, tied to the 'notification_template', and to the receiving 'device'. 
+The 'notification' object also contains status, (TODO: add send timestamp?).
+
+When parsing the response: 
+- mark invalid tokens as removed
+- update old tokens if we receive new
+
