@@ -42,9 +42,10 @@
           <thead>
             <tr>
               <th data-sortable="false" data-visible="false">Id</th>
-              <th data-sortable="true" data-width="13%">Created</th>
+              <th data-sortable="true">Created</th>
+              <th data-sortable="true">Updated</th>
               <th data-sortable="true" data-width="20%">Creator</th>
-              <th data-sortable="true" data-width="13%">Title</th>
+              <th data-sortable="true">Title</th>
               <th data-sortable="false" data-width="25%">Body</th>
               <th data-sortable="true" data-width="13%">Send at</th>
               <th data-sortable="true">Status</th>
@@ -62,6 +63,7 @@
               {% endif %}
                 <td> {{ template.id}}</td>
                 <td> {{ template.formatted_created_at }} </td>
+                <td> {{ template.formatted_updated_at }} </td>
                 <td> {{ template.admin.name}}</td>
                 <td> {{ template.title}}</td>
                 <td> {{ template.body}}</td>

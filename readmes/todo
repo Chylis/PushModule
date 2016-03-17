@@ -7,7 +7,7 @@ V1 Specification, user stories, etc:
 √ View messages and status
 √ View receivers of a notification template
 √ View details of a message and remove/cancel a message
-X View users / registered devices/tokens
+√ View users / registered devices/tokens
 X Users -> User Details -> Shoudl be able to view received messages
 X View administrators
 
@@ -18,7 +18,6 @@ Future specifications:
 X Group users into different groups
 X View user groups / filter users on groups/attributes
 X Send push to specific user groups (A notification_template has receivers? (i.e. list of DeviceId))
-X A notification_template has receivers? (i.e. list of DeviceId)
 X Geolocation
 X Send push to users at certain locations
 
@@ -31,14 +30,11 @@ Todo:
 X cb_admin 
 
 Refactor:
+X Make device more static (keep additionalInfoJson but add fields in model?)
 X view_message_Details: only show receiving users? Currently it shows receiving user once for each of user.device
 X view_user: show received messages
-X Make device more static (remove additionalInfoJson)
 X refactor REST api names, e.g. new_message --> /message 'GET, POST, PUT, DELETE' etc
 X Expose update_user (PUT)
-
-X Remove unused code:
-  - device_service, user_service, etc
 X Check push_module_device_controller and user_controller, make sure you cannot add several devices with same id, etc
 
 X Update lucid chart
@@ -69,6 +65,7 @@ Tests
 X Fix tests that failed after login
 X Eunit Test admin, auth_lib, session_lib, device_service, ,
 X Functional Test push_controller, auth_controller, lost_controller
+X Write tests!!!
 
 X How localize web client?
 

@@ -61,9 +61,10 @@
 
           <thead>
             <tr>
-              <th data-width="13%">Created</th>
+              <th>Created</th>
+              <th>Updated</th>
               <th data-width="20%">Creator</th>
-              <th data-width="13%">Title</th>
+              <th>Title</th>
               <th data-width="25%">Body</th>
               <th data-width="13%">Send at</th>
               <th >Status</th>
@@ -79,6 +80,7 @@
               <tr class = "danger">
               {% endif %}
                 <td> {{ template.formatted_created_at }} </td>
+                <td> {{ template.formatted_updated_at }} </td>
                 <td> {{ template.admin.name}}</td>
                 <td> {{ template.title}}</td>
                 <td> {{ template.body}}</td>

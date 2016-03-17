@@ -20,6 +20,9 @@
 formatted_created_at() ->
   date_utils:format_datetime(CreatedAt).
 
+formatted_updated_at() ->
+  date_utils:format_datetime(UpdatedAt).
+
 formatted_scheduled_for() ->
   date_utils:format_datetime(ScheduledFor).
 
