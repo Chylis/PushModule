@@ -13,9 +13,23 @@
 -belongs_to(usr).
 -has({notification, many}).
 
+-define(DEVICE_TYPE, "deviceType").
+-define(OS, "os").
+-define(OS_VERSION, "osVersion").
+-define(FRAMEWORK_VERSION, "frameworkVersion").
+
 %%%============================================================================
 %%% API
 %%%============================================================================
+
+device_type() ->
+  value_for_property(?DEVICE_TYPE).
+os() ->
+  value_for_property(?OS).
+os_version() ->
+  value_for_property(?OS_VERSION).
+framework_version() ->
+  value_for_property(?FRAMEWORK_VERSION).
 
 % Returns a list of all keys in the AdditionalInfo json object
 property_keys() ->
@@ -33,7 +47,7 @@ value_for_property(Property) ->
 formatted_created_at() ->
   date_utils:format_datetime(CreatedAt).
 
-formatted_updated_at() ->
+formatted_updated_at() -> 
   date_utils:format_datetime(UpdatedAt).
 
 %%%============================================================================
@@ -52,10 +66,10 @@ validation_tests() ->
 
 before_create() ->
   Now = date_utils:local_datetime(),
-  ModifiedDevice = set([{previous_tokens, []}, {created_at, Now}, {updated_at, Now}]),
-  {ok, ModifiedDevice}.
+  Modified = set([{created_at, Now}, {updated_at, Now}, {previous_tokens, []}]),
+  {ok, Modified}.
 
 before_update() ->
   Now = date_utils:local_datetime(),
-  ModifiedDevice= set([{updated_at, Now}]),
-  {ok, ModifiedDevice}.
+  Modified = set([{updated_at, Now}]),
+  {ok, Modified}.

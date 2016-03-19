@@ -40,6 +40,7 @@ view_message('GET', [NotificationTemplateId], _Admin) ->
   Users = lists:map(fun(Device) -> Device:usr() end, Devices),
   {ok, [
       {template, NotificationTemplate}, 
+      {device_properties, device_service:device_properties(Devices)},
       {user_properties, user_service:user_properties(Users)}
     ]}.
 

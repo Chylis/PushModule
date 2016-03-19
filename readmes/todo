@@ -30,8 +30,6 @@ Todo:
 X cb_admin 
 
 Refactor:
-X Make device more static (keep additionalInfoJson but add fields in model?)
-X view_message_Details: only show receiving users? Currently it shows receiving user once for each of user.device
 X view_user: show received messages
 X refactor REST api names, e.g. new_message --> /message 'GET, POST, PUT, DELETE' etc
 X Expose update_user (PUT)

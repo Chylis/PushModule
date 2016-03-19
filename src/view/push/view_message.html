@@ -154,6 +154,10 @@
               <th data-sortable="true">{{property}}</th>
               {% endfor %}
 
+              {% for property in device_properties %}
+              <th data-sortable="true">{{property}}</th>
+              {% endfor %}
+
             </tr>
           </thead>
 
@@ -171,6 +175,10 @@
 
             {% for property in user_properties %}
             <td> {% value_for_user_property user=notification.device.usr property=property %}</td>
+            {% endfor %}
+
+            {% for property in device_properties %}
+            <td> {% value_for_device_property device=notification.device property=property %}</td>
             {% endfor %}
           </tr>
 
