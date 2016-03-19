@@ -26,6 +26,9 @@ formatted_updated_at() ->
 formatted_scheduled_for() ->
   date_utils:format_datetime(ScheduledFor).
 
+formatted_sent_at() ->
+  date_utils:format_datetime(SentAt).
+
 is_sent() ->
   Status == "Sent".
 

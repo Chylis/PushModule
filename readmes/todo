@@ -8,7 +8,7 @@ V1 Specification, user stories, etc:
 √ View receivers of a notification template
 √ View details of a message and remove/cancel a message
 √ View users / registered devices/tokens
-X Users -> User Details -> Shoudl be able to view received messages
+√ Users -> User Details -> Shoudl be able to view received messages
 X View administrators
 
 X Client framework for server communication
@@ -30,7 +30,6 @@ Todo:
 X cb_admin 
 
 Refactor:
-X view_user: show received messages
 X refactor REST api names, e.g. new_message --> /message 'GET, POST, PUT, DELETE' etc
 X Expose update_user (PUT)
 X Check push_module_device_controller and user_controller, make sure you cannot add several devices with same id, etc

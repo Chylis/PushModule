@@ -118,4 +118,77 @@
   </div>
 </div>
 
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+        <h3> Messages</h3>
+      </div>
+    </div>
+  </div>
+
+<!-- Present the received notifications belonging to the user's devices-->
+<div class = "well">
+
+  <div class = "container-fluid">
+    <div class = "row">
+      <div class = "col-md-12">
+
+        <table class = "table" 
+          data-toggle="table"
+          data-search="true"
+          data-show-columns="true"
+          data-show-toggle="true"
+          data-pagination="true"
+          data-page-size="250"
+          data=>
+          <thead>
+            <tr>
+              <th data-sortable="true">Status</th>
+              <th data-sortable="true" data-width="13%">Sent at</th>
+              <th data-sortable="true">GCM Message Id</th>
+              <th data-sortable="true" data-width="20%">Created by</th>
+              <th data-sortable="true">Title</th>
+              <th data-sortable="true" data-width="25%">Body</th>
+
+              {% for property in device_properties %}
+              <th data-sortable="true">{{property}}</th>
+              {% endfor %}
+
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for device in user.device %}
+            {% for notification in device.notification %}
+
+            {% if notification.is_sent %}
+            <tr class = "success">
+            {% else %}
+            <tr class = "danger">
+            {% endif %}
+            <td> {{ notification.delivery_status}}</td>
+            <td> {{ notification.notification_template.formatted_sent_at}}</td>
+            <td> {{ notification.gcm_message_id}}</td>
+            <td> {{ notification.notification_template.admin.name}}</td>
+            <td> {{ notification.notification_template.title}}</td>
+            <td> {{ notification.notification_template.body}}</td>
+
+            {% for property in device_properties %}
+            <td> {% value_for_device_property device=notification.device property=property %}</td>
+            {% endfor %}
+
+          </tr>
+
+            {% endfor %}
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
 {% endblock %}
