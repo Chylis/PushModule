@@ -5,3 +5,7 @@ priv/init:
 
 priv/static
 - added 'app' (bootstrap resources etc)
+
+
+
+- in case of weird errors (e.g. missing_app_file or 'syntax error "in" unexpected'), try removing the /deps directory and run either 'make' or './rebar get-deps compile'
