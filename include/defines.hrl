@@ -3,7 +3,7 @@
 %%%
 
 %%% GCM Server Api Key
--define(GCM_API_KEY, "AIzaSyCA817K5DPHsfC9NAezrOfKm07KpeiYduw").
+-define(GCM_API_KEY, "AIzaSyBWdyC1eyn5ohraoQp1oPK83SIG73WAX_Q").
 
 
 
