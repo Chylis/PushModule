@@ -23,6 +23,9 @@
             {{ _session.admin_name|upper }}
             {% else %} 
             Unauthorized User 
+            <script type="text/javascript"> 
+              window.location="/auth/login"
+            </script>
             {% endif %}
           </a>
         </div>
