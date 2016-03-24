@@ -1,0 +1,24 @@
+ReqParams: 
+  - Json from mobile:
+    - Request:  <<"{\"userId\":\"chylis88\",\"additionalInfo\":{\"email\":\"chylis88@gmail.com\",\"mood\":\"squashy\",\"name\":\"mag\"}}">>
+    - Result:   {"chylis88", {struct,[{"email","chylis88@gmail.com"}, {"mood","squashy"}, {"name","mag"}]}}
+
+  - Post from curl:
+    - request: [
+                {<<"userId">>,<<"alex">>},  
+                {<<"additionalInfo">>, 
+                  <<"{\"name\":\"AlexandraCarlen\", \"msisdn\":\"467233593432\", \"address\":\"MidsommarvÃ¤gen\", \"email\":\"alexandra.carlen@gmail.com\", \"gender\":\"female\"}">>
+                }]
+
+
+  - Modified mobile:
+      -Request: [
+                  {<<"userId">>,<<"chylis88">>},
+                  {<<"additionalInfo">>,
+                    <<"{    email = \"chylis88@gmail.com\";    mood = squashy;    name = mag;}">>}]
+
+  - POST from auth/login:
+    - Request: <<"name=maggan&password=maggan&redirect=%2Fpush%2Fnew_message">>
+    - Result: {"maggan","maggan"}
+
+

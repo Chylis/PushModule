@@ -62,11 +62,7 @@ update_gcm_token(Token, NewToken, DeviceId) when is_list(Token), is_list(NewToke
   case boss_db:find(device, [{device_id, DeviceId}]) of
     []                  -> {error, "No device with the received deviceId is registered"};
     [ExistingDevice]    -> 
-      PrevTokens = sets:to_list(sets:from_list([ExistingDevice:gcm_token() | ExistingDevice:previous_tokens()])),
-      UpdatedDevice = ExistingDevice:set([
-          {previous_tokens, PrevTokens},
-          {gcm_token, NewToken}
-        ]),
+      UpdatedDevice = ExistingDevice:set([{gcm_token, NewToken}]),
       save_device(UpdatedDevice)
   end;
 update_gcm_token(_Token, _NewToken, _DeviceId) ->
@@ -83,10 +79,7 @@ delete_gcm_token(Token, DeviceId) ->
       case ExistingDevice:device_id() == DeviceId of
         false -> ok;
         true ->
-          UpdatedDevice = ExistingDevice:set([
-              {previous_tokens, [Token | ExistingDevice:previous_tokens()]}, 
-              {gcm_token, undefined}
-            ]),
+          UpdatedDevice = ExistingDevice:set([{gcm_token, undefined}]),
           save_device(UpdatedDevice)
       end
   end, 

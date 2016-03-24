@@ -1,9 +1,9 @@
 -module(notification, [
     Id, 
-    DeliveryStatus,         % Status string, 'Sent' | 'Unknown Error' | 'Retry' | 'Invalid Token'
-    GcmMessageId,           % Gcm message id of the notification
-    DeviceId,               % Id of device/token that received notfication
-    NotificationTemplateId  % Id of notification template containing the content
+    DeliveryStatus::string(),         % Status string, 'Sent' | 'Unknown Error' | 'Retry' | 'Invalid Token'
+    GcmMessageId::string(),           % Gcm message id of the notification
+    DeviceId::string(),               % Id of device/token that received notfication
+    NotificationTemplateId::string()  % Id of notification template containing the content
   ]).
 -compile(export_all).
 -belongs_to(notification_template).

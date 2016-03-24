@@ -1,13 +1,13 @@
 -module(notification_template, [
     Id, 
-    Title,        % Title of notification
-    Body,         % Body of notification
-    ScheduledFor, % Schedule date
-    SentAt,       % Date notification was sent
-    Status,       % Status string, 'Sent' | 'Pending' | 'Failed: Retry' | 'Error: <Reason>'
-    CreatedAt,    % Creation date
     AdminId,      % Id of admin that created notification
-    UpdatedAt     % Update date
+    Status::string(),       % Status string, 'Sent' | 'Pending' | 'Failed: Retry' | 'Error: <Reason>'
+    Title::string(),        % Title of notification
+    Body::string(),         % Body of notification
+    ScheduledFor::datetime(), % Schedule date
+    SentAt::datetime(),       % Date notification was sent
+    CreatedAt::datetime(),    % Creation date
+    UpdatedAt::datetime()     % Update date
   ]).
 -compile(export_all).
 -belongs_to(admin).

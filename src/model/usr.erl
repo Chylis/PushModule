@@ -1,9 +1,9 @@
 -module(usr, [
     Id, 
-    ExternalId,     % External user id, received from the client application
-    AdditionalInfo, % Optional json object received from the client app containing dynamic data about the user, e.g. "firstName", "gender", etc
-    CreatedAt,      % Date 
-    UpdatedAt       % Date
+    ExternalId::string(),     % External user id, received from the client application
+    AdditionalInfo::string(), % Optional json object received from the client app containing dynamic data about the user, e.g. "firstName", "gender", etc
+    CreatedAt::datetime(),      % Date 
+    UpdatedAt::datetime()       % Date
   ]).
 -compile(export_all).
 -has({device, many}).

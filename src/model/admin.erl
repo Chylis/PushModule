@@ -1,4 +1,4 @@
--module(admin, [Id, Name, PasswordHash]).
+-module(admin, [Id, Name::string(), PasswordHash::string()]).
 -compile(export_all).
 -has({notification_template, many}).
 
@@ -11,7 +11,8 @@
 check_password(Password) ->
   MD5 = erlang:md5(Name),
   Salt = mochihex:to_hex(MD5),
-  auth_lib:hash_password(Password, Salt) =:= PasswordHash.
+  ReceivedPasswordHash= auth_lib:hash_password(Password, Salt),
+  ReceivedPasswordHash =:= PasswordHash.
 
 login_cookies() ->
   auth_lib:login_cookies(Id, session_identifier()).

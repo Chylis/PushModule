@@ -1,12 +1,11 @@
 -module(device, [
     Id,             % Database id
-    DeviceId,       % Device id, UUID
-    UsrId,          % Id of owner
-    AdditionalInfo, % Optional json object received from the client app containing dynamic data about the device, e.g. "os", "osVersion", etc
-    GcmToken,       % Current token, string
-    PreviousTokens, % List of previous gcm tokens,
-    CreatedAt,      % Date 
-    UpdatedAt       % Date
+    DeviceId::string(),       % Device id, UUID
+    UsrId::string(),          % Id of owner
+    AdditionalInfo::string(), % Optional json object received from the client app containing dynamic data about the device, e.g. "os", "osVersion", etc
+    GcmToken::string(),       % Current token, string
+    CreatedAt::datetime(),      % Date 
+    UpdatedAt::datetime()       % Date
   ]).
 
 -compile(export_all).
@@ -66,7 +65,7 @@ validation_tests() ->
 
 before_create() ->
   Now = date_utils:local_datetime(),
-  Modified = set([{created_at, Now}, {updated_at, Now}, {previous_tokens, []}]),
+  Modified = set([{created_at, Now}, {updated_at, Now}]),
   {ok, Modified}.
 
 before_update() ->
