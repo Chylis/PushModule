@@ -1,11 +1,22 @@
-priv/init:
-- started boss_mq
-- started boss_news
-- started inets and ssl
-
-priv/static
-- added 'app' (bootstrap resources etc)
-
-
+Installation:
+  - Create database and tables by running push_module.sql
+  - Add GCM Server API Key to 'include/defines.hrl'
+  - Run 'init-dev.sh' or 'init.sh start'
 
 - in case of weird errors (e.g. missing_app_file or 'syntax error "in" unexpected'), try removing the /deps directory and run either 'make' or './rebar get-deps compile'
+
+Structure:
+
+priv:
+  - init: Contains start up scripts, etc
+  - static: webapp resources, e.g. bootstrap, javascript, etc
+
+include:
+  - defines.hrl: App constants and macros.
+
+src:
+  - controllers: Contains web controllers
+  - views: html views
+  - model: database models
+  - lib: libs, helpers, etc
+

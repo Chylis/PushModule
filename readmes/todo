@@ -6,13 +6,13 @@ V1 Specification, user stories, etc:
 √ Schedule push to all
 √ View messages and status
 √ View receivers of a notification template
-√ View details of a message and remove/cancel a message
+√ View details of a message and edit/remove/cancel a message
 √ View users / registered devices/tokens
 √ Users -> User Details -> Shoudl be able to view received messages
-  √ Client framework for server communication
+√ Client framework for server communication
 X View administrators, add new administrators (an admin has a role, e.g. super-admin, regular admin, etc)
 
-  Future specifications:
+Future specifications:
   X Group users into different groups
   X View user groups / filter users on groups/attributes
 X Send push to specific user groups (A notification_template has receivers? (i.e. list of DeviceId))
@@ -22,95 +22,61 @@ X Send push to specific user groups (A notification_template has receivers? (i.e
 
 ############################################################
 
-  MISC:
-Todo:
-
-X Write an installation guide containing:
-  - Setup of db
-  - Script
-  - Explanation 
+Todo V1:
 
 X Performance sucks when accessing DB, e.g.
   1) Register 500 users with 2 devices each (i.e. 500 users and 1000 devices)
   2) Create a notification and wait for it to be sent
   3) Navigate to notification detail and WAIT FOREVER while notifications, users and devices are being fetched...
- 
-X Seems to be a maximum of 1000 GCM bulk messages? 
-Error sending notification: 400 - "Number of messages on bulk (10000) exceeds maximum allowed (1000)\n"}
 
+  How to fix?
+    - Think over access pattern? E.g. don't access several times from view, instead, only fetch once in controller and send to view?
+    - Disable db-log?
+    - Index?
+    - Cache?
 
-X notification_template status column: 
-                                         15:50:43.234 [info] Query UPDATE notification_templates SET `updated_at` = '2016-03-24 15:50:43', `created_at` = '2016-03-24 15:50:27', `sent_at` = '2016-03-24 15:50:39', `scheduled_for` = '2016-03-24 15:50:00', `body` = 'Hehe', `title` = 'Uh oh', `status` = 'Error: {ok,{400,
-                                           [{"cache-control","private, max-age=0"},
-                                           {"date","Thu, 24 Mar 2016 14:50:43 GMT"},
-                                           {"accept-ranges","none"},
-                                           {"server","GSE"},
-                                           {"vary","Accept-Encoding"},
-                                           {"content-length","66"},
-                                           {"content-type","text/plain; charset=UTF-8"},
-                                           {"expires","Thu, 24 Mar 2016 14:50:43 GMT"},
-                                           {"x-content-type-options","nosniff"},
-                                           {"x-frame-options","SAMEORIGIN"},
-                                           {"x-xss-protection","1; mode=block"},
-                                           {"alternate-protocol","443:quic,p=1"},
-                                           {"alt-svc",
-                                             "quic=\":443\"; ma=2592000; v=\"31,30,29,28,27,26,25\""}],
-                                           "Number of messages on bulk (10000) exceeds maximum allowed (1000)\n"}}', `admin_id` = 1 WHERE id = 2
-                                             15:50:43.235 [error] SQL Error: "Data too long for column 'status' at row 1"
+X A maximum of 1000 GCM bulk messages. Divide receivers into groups of 1000
+  Error sending notification: 400 - "Number of messages on bulk (10000) exceeds maximum allowed (1000)\n"}
 
-                                             Refactor:
-                                             X refactor REST api names, e.g. new_message --> /message 'GET, POST, PUT, DELETE' etc
-                                             X refactor Client framework to comply to updated REST api
-                                             X Update apiary to comply to updated REST api
-                                             X Expose update_user (PUT)
-                                             X Check push_module_device_controller and user_controller, make sure you cannot add several devices with same id, etc
-                                             X Create installation guide, e.g. where to put server api key, etc
+X refactor REST api names, e.g. new_message --> /message 'GET, POST, PUT, DELETE' etc
+X Expose update_user (PUT)
+X refactor Client framework to comply to updated REST api
+X Update apiary to comply to updated REST api
+X Update lucid chart
 
-                                             X Update lucid chart
-                                             X Update apiary
+X Check push_module_device_controller and user_controller, make sure you cannot add several devices with same id, etc
 
-                                             X Live update of sent notifications in 'push/view_messages' when a message is sent
-                                             X Live update of received notifications in 'user/' when a message is sent
-                                             X Move notification_scheduler into src, and invoke it from init?
-                                             X Write tests!!!
-
-                                             X refactor common components into reusable div classes
-                                             X refactor common components into reusable html template/element
-                                             √ template_base, create block_meta_scripts in end of BODY? for performance
-                                             X all views, see if I can refactor reouting to {% url action %} format, 
-                                           X view:Disable 'create' button if no input is entered
-
-                                             X Improve code reusablity etc
-                                             - <a href="{% url action="edit" record_id=record.id %}
-
-                                       - <form name="upload" action="{% url action="upload" model_name=type %}" method="post" enctype="multipart/form-data">
-                                         <input type="file" name="file" /> &nbsp; &nbsp;
-                                       <input type="submit" value="Upload" />
-                                         </form>
-
-
-
-
-                                         Tests
-                                         X Fix tests that failed after login
-                                         X Eunit Test admin, auth_lib, session_lib, device_service, ,
-                                           X Functional Test push_controller, auth_controller, lost_controller
-                                             X Write tests!!!
-
-                                             X How localize web client?
+X CRUD admins (an admin has a role, e.g. super-admin, regular admin, etc)
 
 ############################################################
 
-                                             Backend:
+Todo Future: 
 
-                                             Mobile Client API:
+  X Live update of sent notifications in 'push/view_messages' when a message is sent
+  X Live update of received notifications in 'user/' when a message is sent
+  X Move notification_scheduler into src, and invoke it from init?
+  X Write tests!!!
 
-                                             Web Client API:
+  X refactor common components into reusable div classes
+  X refactor common components into reusable html template/element
+  √ template_base, create block_meta_scripts in end of BODY? for performance
+  X all views, see if I can refactor reouting to {% url action %} format, 
+  X view:Disable 'create' button if no input is entered
 
-                                             X Misc) 
+  X Improve code reusablity etc
+  - <a href="{% url action="edit" record_id=record.id %}
+
+  - <form name="upload" action="{% url action="upload" model_name=type %}" method="post" enctype="multipart/form-data">
+  <input type="file" name="file" /> &nbsp; &nbsp;
+  <input type="submit" value="Upload" />
+  </form>
+
+Tests
+  X Fix tests that failed after login
+  X Eunit Test admin, auth_lib, session_lib, device_service, ,
+  X Functional Test push_controller, auth_controller, lost_controller
+  X Write tests!!!
+
+  X How localize web client?
 
 ############################################################
-
-                                             Frontend:
-
-                                             Web Client:
