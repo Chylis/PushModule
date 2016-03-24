@@ -1,7 +1,7 @@
 -module(push_module_notification_scheduler).
 -export([init/0, stop/1, check_expired_and_unsent_notifications/0]).
 -include("include/defines.hrl").
--define(INTERVAL, 30000).
+-define(INTERVAL, 20000).
 
 init() ->
   {ok, TimerId} = timer:apply_interval(?INTERVAL, ?MODULE, check_expired_and_unsent_notifications, []),

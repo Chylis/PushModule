@@ -1,0 +1,14 @@
+{
+  "to" : "kRr7EgoyHmo:APA91bHJl6CUjZ6gd_HDzkA3P3-ybnfP0uEm9_83_FSFCUVZ1_5TVKVQO7QlnI_mMEQqOjOo3hgmSxi0cUQ5wDhxO-5tavhYOfxGeNWupW7tMzoMf8tXQd0puOfafNtMs1s6PyB10V3r",
+    "content_available": true,
+    "priority": "high",
+    "notification": {
+      "sound": "default",
+      "title": "Herro!",
+      "body": "Mag wants to play squash!"
+    },
+    "data" : {
+      "url": "https://webwrapperbackend.appspot.com/push_content/push.html"
+      "url2": "https://webwrapperbackend.appspot.com/push_content/push.html"
+    }
+}
