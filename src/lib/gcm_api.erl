@@ -23,9 +23,15 @@ send_message(ApiKey, ReceiverTokens, MsgTitle, MsgBody) ->
       RetryAfter = proplists:get_value("Retry-After", Headers),
       TokenStatusList = handle_response(Response, ReceiverTokens),
       {ok, {token_statuses, TokenStatusList}, {retry_after, RetryAfter}};
-    {ok, {500, Headers, _}} -> 
-      RetryAfter = proplists:get_value("Retry-After", Headers),
-      {error, {retry_after, RetryAfter}};
+    {ok, {400, _Headers, Response}} -> 
+      {error, Response};
+    {ok, {500, Headers, Response}} -> 
+      case proplists:get_value("Retry-After", Headers) of
+        undefined -> 
+          {error, Response};
+        RetryAfter ->
+          {error, {retry_after, RetryAfter}}
+      end;
     Other -> 
       {error, Other}
   end.
