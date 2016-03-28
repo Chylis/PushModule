@@ -1,11 +1,15 @@
 Notification scheduling:
 1) Admin creates a new notification template through the web UI, containing title, body, scheduledFor
 2) A bg-timer checks for notification_templates that have not been sent and whos scheuledFor has passed.
-2.2) For each found notification, update 'sentAt' and send them.
-2.3) Upon receiving response, persist a 'notification' object, tied to the 'notification_template', and to the receiving 'device'. 
+2.2) For each found notification, update 'sentAt' and pass them to a serial message queue
+2.3) For each message in the serial message queue, divide the receivers into batches of 1000 and send each serially
+2.4) Attempt to send each batch a maximum of 5 times (honor retry-after by implementing exponential-backoff)
+2.5) Upon receiving response, persist a 'notification' object, tied to the 'notification_template', and to the receiving 'device'. 
+2.6) If any errors occurred during any batch, the notification_template status will be error (even if some batches were successful)
+
 The 'notification' object also contains status, (TODO: add send timestamp?).
 
 When parsing the response: 
-- mark invalid tokens as removed
+- remove invalid tokens 
 - update old tokens if we receive new
 

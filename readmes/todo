@@ -24,28 +24,31 @@ X Send push to specific user groups (A notification_template has receivers? (i.e
 
 Todo V1:
 
+X Unable to create notifications with 'åäö'
+X Refreshing a page causes a re-submit, e.g. notification_template
+
 X Performance sucks when accessing DB, e.g.
   1) Register 500 users with 2 devices each (i.e. 500 users and 1000 devices)
   2) Create a notification and wait for it to be sent
   3) Navigate to notification detail and WAIT FOREVER while notifications, users and devices are being fetched...
-
   How to fix?
     - Think over access pattern? E.g. don't access several times from view, instead, only fetch once in controller and send to view?
+    - Paging?
     - Disable db-log?
     - Index?
     - Cache?
 
-X A maximum of 1000 GCM bulk messages. Divide receivers into groups of 1000
-  Error sending notification: 400 - "Number of messages on bulk (10000) exceeds maximum allowed (1000)\n"}
+√ A maximum of 1000 GCM bulk messages. Divide receivers into groups of 1000
+√ Handle RetryAfter
+X Verify the format of 'RetryAfter', otherwise a crash will occurr in gcm_api
+  - Format ? {"expires","Tue, 29 Mar 2016 08:22:07 GMT"},
 
-X refactor REST api names, e.g. new_message --> /message 'GET, POST, PUT, DELETE' etc
+X refactor mobile REST api names, e.g. new_message --> /message 'GET, POST, PUT, DELETE' etc
 X Expose update_user (PUT)
 X refactor Client framework to comply to updated REST api
 X Update apiary to comply to updated REST api
 X Update lucid chart
-
 X Check push_module_device_controller and user_controller, make sure you cannot add several devices with same id, etc
-
 X CRUD admins (an admin has a role, e.g. super-admin, regular admin, etc)
 
 ############################################################
@@ -78,5 +81,22 @@ Tests
   X Write tests!!!
 
   X How localize web client?
+
+
+
+Test agains mock endpoint
+
+  Test 200 with retry_after
+    - √ Doesn't retry (probably because I need to change the format of TokensToRetry (i.e. remove the tuples and only have a list of tokens?))
+
+  Test 400
+    - √: Column too long (tried to persist the whole html 404response): Fixed by only showing status code (what about {error, Other} ?)
+
+  Test 500
+    - √: Failed when receiving 503 - httpc:request seems to retry by itself (at least when Retry-After < 300?)
+    - √: Failed to read 'Retry-After'. Response was in following format: {"retry-after","30"},, Fixed by adding 'http_utils:retry_after_from_header'
+
+  Test 600
+  - X: {"multicast_id":4906765674922284968,"success":0,"failure":1,"canonical_ids":0,"results":[{"error":"Unavailable"}]}
 
 ############################################################

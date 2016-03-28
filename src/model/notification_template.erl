@@ -1,7 +1,7 @@
 -module(notification_template, [
     Id, 
     AdminId,      % Id of admin that created notification
-    Status::string(),       % Status string, 'Sent' | 'Pending' | 'Failed: Retry' | 'Error: <Reason>'
+    Status::string(),       % Status string, 'Sent' | 'Sending' | 'Pending' | 'Failed: Retry' | 'Error: <Reason>'
     Title::string(),        % Title of notification
     Body::string(),         % Body of notification
     ScheduledFor::datetime(), % Schedule date
@@ -31,6 +31,9 @@ formatted_sent_at() ->
 
 is_sent() ->
   Status == "Sent".
+
+is_sending() ->
+  Status == "Sending".
 
 is_pending() ->
   Status == "Pending".

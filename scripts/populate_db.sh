@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in `seq 1 501`;
+for i in `seq 1 1501`;
 do
 
   ##Register users:
@@ -60,6 +60,6 @@ do
 done 
 
 #Register an actual token...
-gcmToken="k6a0XS4-lSY:APA91bEO3D8H3mhYsv51VCs-JQtzCkac-Le7BAP_CtC4huC3nBn05OhZDTo71GFYO8FRQY3hj2V6m_I0Vq43Vjyal-GTPeaDQjY74R5wF84UBgBqAGEK16cA1IQSfcDI1hO3Z2aE1VP4"
+gcmToken="kRr7EgoyHmo:APA91bHJl6CUjZ6gd_HDzkA3P3-ybnfP0uEm9_83_FSFCUVZ1_5TVKVQO7QlnI_mMEQqOjOo3hgmSxi0cUQ5wDhxO-5tavhYOfxGeNWupW7tMzoMf8tXQd0puOfafNtMs1s6PyB10V3r"
 deviceId="user1_device1"
-curl -v -d 'token='$gcmToken'&deviceId='$deviceId localhost:8001/device/register_token 
+#curl -v -d 'token='$gcmToken'&deviceId='$deviceId localhost:8001/device/register_token 

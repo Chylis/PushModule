@@ -70,7 +70,7 @@ create_sent_notification(retry, Device, NotificationTemplate) ->
   Notification = boss_record:new(notification, [{delivery_status, "Retry"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
   Notification:save();
 create_sent_notification(error, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Uknown Error"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
+  Notification = boss_record:new(notification, [{delivery_status, "Unknown Error"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
   Notification:save();
 create_sent_notification(GcmMessageId, Device, NotificationTemplate) ->
   Notification = boss_record:new(notification, [{delivery_status, "Sent"}, {gcm_message_id, GcmMessageId}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),

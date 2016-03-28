@@ -90,7 +90,6 @@ device_with_gcm_token(Token) ->
 
 
 process_token_status_list(TokenStatusList, NotificationTemplate) ->
-  io:format("Handle statuses from gcm: ~p", [TokenStatusList]),
   lists:foreach(fun(Entry) -> process_token(Entry, NotificationTemplate) end, TokenStatusList).
 
 process_token({Token, {{ok, MessageId}, {new_token, NewToken}}}, NotificationTemplate) ->

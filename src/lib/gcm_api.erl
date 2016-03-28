@@ -9,29 +9,34 @@
 %%% API
 %%%
 
+% https://developers.google.com/cloud-messaging/http-server-ref#error-codes
 % Attemps to send a message to GCM.
 % Returns a list of tuples, where each tuple is a token and its gcm status.
-% - {ok, {token_statuses, [token, status]}, {retry_after, (undefined | Value)}}, e.g. [{"12", ok} {"34", remove}, {"56", retry}, {"78", {new_token, "87"}] 
-% - {error {retry_after, (undefined | Duration)}} 
+% Returns a list of Tokens to retry
+% - {ok, {token_statuses, TokenStatusList}, {retry_tokens, TokensToRetry},  {retry_after, Seconds}}
+% - {error {retry_after, Duration}} 
 % - {error, Reason}
 send_message(_ApiKey, [], _MsgTitle, _MsgBody) ->
   {error, "No receivers"};
 send_message(ApiKey, ReceiverTokens, MsgTitle, MsgBody) ->
   Request = create_request(ApiKey, ReceiverTokens, MsgTitle, MsgBody),
-  case http_utils:send_http_request(post, Request, [], []) of
+
+  case http_utils:send_http_request(post, Request) of
     {ok, {200, Headers, Response}} -> 
-      RetryAfter = proplists:get_value("Retry-After", Headers),
+      RetryAfter = http_utils:retry_after_from_header(Headers),
       TokenStatusList = handle_response(Response, ReceiverTokens),
-      {ok, {token_statuses, TokenStatusList}, {retry_after, RetryAfter}};
-    {ok, {400, _Headers, Response}} -> 
-      {error, Response};
-    {ok, {500, Headers, Response}} -> 
-      case proplists:get_value("Retry-After", Headers) of
-        undefined -> 
-          {error, Response};
-        RetryAfter ->
-          {error, {retry_after, RetryAfter}}
-      end;
+      io:format("Complete token status list: ~p~n", [TokenStatusList]),
+      {RetryTokens, OtherTokens} = lists:partition(fun(Entry) -> element(2, Entry) == retry end, TokenStatusList),
+      TokensToRetry = lists:map(fun(Tuple) -> element(1, Tuple) end, RetryTokens),
+      {ok, {token_statuses, OtherTokens}, {retry_tokens, TokensToRetry}, {retry_after, RetryAfter}};
+
+    {ok, {StatusCode, _Headers, _Response}} when StatusCode >= 400, StatusCode < 500 -> 
+      {error, StatusCode};
+
+    {ok, {StatusCode, Headers, _Response}} when StatusCode >= 500, StatusCode < 600 -> 
+      RetryAfter = http_utils:retry_after_from_header(Headers),
+      {error, {retry_after, RetryAfter}};
+
     Other -> 
       {error, Other}
   end.
@@ -124,4 +129,3 @@ handle_result([{"error", "InvalidRegistration"}]) ->
   remove;
 handle_result(_Result) ->
   error.
-

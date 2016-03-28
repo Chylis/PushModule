@@ -76,6 +76,8 @@
               <tr class = "success">
               {% elif template.is_pending %}
               <tr class = "warning">
+              {% elif template.is_sending %}
+              <tr class = "info">
               {% else %}
               <tr class = "danger">
               {% endif %}
