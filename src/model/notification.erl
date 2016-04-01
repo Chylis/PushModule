@@ -1,6 +1,6 @@
 -module(notification, [
     Id, 
-    DeliveryStatus::string(),         % Status string, 'Sent' | 'Unknown Error' | 'Retry' | 'Invalid Token'
+    DeliveryStatus::string(),         % Status string, 'Sent' | 'Unknown Error' | 'Invalid Token'
     GcmMessageId::string(),           % Gcm message id of the notification
     DeviceId::string(),               % Id of device/token that received notfication
     NotificationTemplateId::string()  % Id of notification template containing the content

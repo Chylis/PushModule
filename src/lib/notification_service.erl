@@ -66,9 +66,6 @@ all_notification_templates() ->
 create_sent_notification(remove, Device, NotificationTemplate) ->
   Notification = boss_record:new(notification, [{delivery_status, "Invalid token"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
   Notification:save();
-create_sent_notification(retry, Device, NotificationTemplate) ->
-  Notification = boss_record:new(notification, [{delivery_status, "Retry"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
-  Notification:save();
 create_sent_notification(error, Device, NotificationTemplate) ->
   Notification = boss_record:new(notification, [{delivery_status, "Unknown Error"}, {device_id, Device:id()}, {notification_template_id, NotificationTemplate:id()}]),
   Notification:save();

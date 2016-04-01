@@ -103,9 +103,8 @@ process_token({Token, remove}, NotificationTemplate) ->
   Device = device_with_gcm_token(Token),
   notification_service:create_sent_notification(remove, Device, NotificationTemplate),
   delete_gcm_token(Token, Device:device_id());
-process_token({Token, retry}, NotificationTemplate) ->
-  Device = device_with_gcm_token(Token),
-  notification_service:create_sent_notification(retry, Device, NotificationTemplate);
+process_token({_Token, retry}, _NotificationTemplate) ->
+  ok;
 process_token({Token, error}, NotificationTemplate) ->
   Device = device_with_gcm_token(Token),
   notification_service:create_sent_notification(error, Device, NotificationTemplate).
