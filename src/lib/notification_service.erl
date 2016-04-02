@@ -44,11 +44,11 @@ delete_notification_template_with_id(Id) ->
   end.
 
 
-% Returns all notification templates that have expired but not yet been sent
+% Returns all notification templates that have expired with status "Pending"
 expired_notification_templates() ->
   ExpiredNotifications = boss_db:find(
     notification_template, 
-    [{scheduled_for, 'lt', date_utils:local_datetime()}, {sent_at, 'equals', undefined}], 
+    [{scheduled_for, 'lt', date_utils:local_datetime()}, {status, 'equals', "Pending"}], 
     [{order_by, scheduled_for}, {descending, false}]),
   ExpiredNotifications.
 

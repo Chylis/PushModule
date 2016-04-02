@@ -1,6 +1,9 @@
--module(gcm_message_sender).
--export([init/0]).
+-module(notification_scheduler).
+-export([check_expired_and_unsent_notifications/0]).
 -include("include/defines.hrl").
+
+% Check for Pending notification every X ms
+-define(INTERVAL, 10000).
 
 % Max number of retries to send a notification
 -define(MAX_RETRIES, 5).
@@ -8,34 +11,29 @@
 % Max number of milliseconds to wait before next retry (8 Hours)
 -define(CAP_RETRY_AFTER_MILLISECONDS, 28800000).
 
-init() ->
-  loop().
+check_expired_and_unsent_notifications() ->
+  timer:sleep(?INTERVAL),
+  ExpiredNotifications = notification_service:expired_notification_templates(),
+  lists:foreach(fun send_scheduled_notification/1, ExpiredNotifications),
+  check_expired_and_unsent_notifications().
 
-loop() ->
-  receive
-    {send, NotificationTemplate} ->
-      UpdatedTemplate = notification_service:update_notification_template(NotificationTemplate, status, "Sending"),
+send_scheduled_notification(NotificationTemplate) ->
+  UpdatedTemplate = notification_service:update_notification_template(NotificationTemplate, status, "Sending"),
 
-      AllReceivers = device_service:tokens(),
-      SplitReceiverLists = list_utils:n_length_chunks(AllReceivers, 1000),
+  AllReceivers = device_service:tokens(),
+  SplitReceiverLists = list_utils:n_length_chunks(AllReceivers, 1000),
 
-      ResultList = lists:map(fun(Receivers) -> 
-            FilteredReceivers = lists:filter(fun(Token) -> Token =/= undefined end, Receivers),
-            send_message(FilteredReceivers, UpdatedTemplate)
-        end, 
-        SplitReceiverLists),
+  ResultList = lists:map(fun(Receivers) -> 
+        FilteredReceivers = lists:filter(fun(Token) -> Token =/= undefined end, Receivers),
+        send_message(FilteredReceivers, UpdatedTemplate)
+    end, 
+    SplitReceiverLists),
 
-      case lists:keyfind(error, 1, ResultList) of
-        false ->
-          notification_service:update_notification_template(UpdatedTemplate, status, "Sent");
-        {error, StatusString} ->
-          notification_service:update_notification_template(UpdatedTemplate, status, StatusString)
-      end,
-
-      loop();
-
-    stop ->
-      ok
+  case lists:keyfind(error, 1, ResultList) of
+    false ->
+      notification_service:update_notification_template(UpdatedTemplate, [{status, "Sent"}, {sent_at, date_utils:local_datetime()}]);
+    {error, StatusString} ->
+      notification_service:update_notification_template(UpdatedTemplate, status, StatusString)
   end.
 
 send_message(ReceiverTokens, NotificationTemplate) ->

@@ -13,9 +13,11 @@ V1 Specification, user stories, etc:
 X View administrators, add new administrators (an admin has a role, e.g. super-admin, regular admin, etc)
 
 Future specifications:
+  X Send custom data in notification payload
+  X Press 'retry' on notification_templates that have not been sent after max number of retries
   X Group users into different groups
   X View user groups / filter users on groups/attributes
-X Send push to specific user groups (A notification_template has receivers? (i.e. list of DeviceId))
+  X Send push to specific user groups (A notification_template has receivers? (i.e. list of DeviceId))
   X Geolocation
   X Send push to users at certain locations
 
@@ -24,6 +26,7 @@ X Send push to specific user groups (A notification_template has receivers? (i.e
 
 Todo V1:
 
+X Docker
 X Unable to create notifications with 'åäö'
 X Refreshing a page causes a re-submit, e.g. notification_template
 
@@ -37,8 +40,8 @@ X Performance sucks when accessing DB, e.g.
     - Disable db-log?
     - Index?
     - Cache?
+    - Set up NOSQL database? Riak?
 
-√ A maximum of 1000 GCM bulk messages. Divide receivers into groups of 1000
 √ Handle RetryAfter
 X Verify the format of 'RetryAfter', otherwise a crash will occurr in gcm_api
   - Format ? {"expires","Tue, 29 Mar 2016 08:22:07 GMT"},
